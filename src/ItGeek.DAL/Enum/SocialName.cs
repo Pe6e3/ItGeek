@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ItGeek.DAL.Enitities
+namespace ItGeek.DAL.Enum
 {
     public enum SocialName
     {
