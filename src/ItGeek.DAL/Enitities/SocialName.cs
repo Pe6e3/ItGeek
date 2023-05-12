@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace ItGeek.DAL.Enitities
 {
-    public class Role:BaseEntity
+    public enum SocialName
     {
-        public Enum? RoleName { get;set }
+        Facebook = 1,
+        Twitter = 2,
+        YouTube = 3,
+        Instagram = 4
     }
 }

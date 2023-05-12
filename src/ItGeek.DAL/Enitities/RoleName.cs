@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace ItGeek.DAL.Enitities
 {
-    public class Role:BaseEntity
+    public enum RoleName
     {
-        public Enum? RoleName { get;set }
+        SuperAdmin = 1,
+        Admin = 2,
+        Moderator = 3,
+        Basic = 4
     }
 }
