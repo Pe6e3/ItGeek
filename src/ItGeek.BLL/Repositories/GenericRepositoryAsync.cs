@@ -1,6 +1,8 @@
 ﻿using ItGeek.DAL.Interfaces;
 using ItGeek.DAL.Data;
 using Microsoft.EntityFrameworkCore;
+using Azure;
+using System.Drawing;
 
 namespace ItGeek.DAL.Data.Repositories
 {
@@ -13,35 +15,44 @@ namespace ItGeek.DAL.Data.Repositories
             _db = db;
         }
 
+
+
+        public async Task<T> GetByIDAsync(int id)
+        {
+            return await _db.Set<T>().FirstAsync();
+
+        }
+        public async Task<T> InsertAsync(T entity)
+        {
+            await _db.Set<T>().AddAsync(entity);
+            await _db.SaveChangesAsync();
+
+            return entity;
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            _db.Entry(entity).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            _db.Set<T>().Remove(entity);
+            await _db.SaveChangesAsync();
+        }
+
+
         public async Task<IReadOnlyList<T>> GetPagedAsync(int page, int size)
+        {
+            return await _db.Set<T>().Skip((page - 1) * size).Take(size).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<T>> ListAllAsync()
         {
             return await _db.Set<T>().ToListAsync();
         }
 
-        public Task<T> GetByIDAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task DeleteAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
-  
-
-        public Task<T> InsertAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<T>> ListAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(T entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
