@@ -14,7 +14,8 @@ namespace ItGeek.DAL.Enitities
         public string? Message{ get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public List<PostComment>? PostComments { get; set; }
+        public List<Post>? Posts { get; } = new();
+
 
     }
 }

@@ -13,7 +13,7 @@ namespace ItGeek.DAL.Enitities
         public int Slug { get; set; }
         public string? CategoryImage { get; set; }
 
-        public List<PostCategory>? PostCategories { get; set; }
+               public List<Post>? Posts { get; } = new();
 
 
     }

@@ -13,7 +13,7 @@ namespace ItGeek.DAL.Enitities
         public int Slug { get; set; }
         public string? TagImage { get; set; }
 
-        public List<PostTag>? PostTags { get; set; }
+        public List<Post>? Posts { get; } = new();
 
 
     }

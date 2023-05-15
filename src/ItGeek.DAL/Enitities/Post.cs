@@ -14,10 +14,10 @@ namespace ItGeek.DAL.Enitities
         public User? CreatedBy { get; set; }
         public User? EditedBy { get; set; }
 
-        public List<PostAuthor>? PostAuthors { get; set; }
-        public List<PostCategory>? PostCategories { get; set; }
-        public List<PostTag>? PostTags { get; set; }
-        public List<PostComment>? PostComments { get; set; }
+        public List<Author>? Authors { get; set; }
+        public List<Category>? Categories { get; set; }
+        public List<Tag>? Tags { get; set; }
+        public List<Comment>? Comments { get; set; }
 
 
     }
