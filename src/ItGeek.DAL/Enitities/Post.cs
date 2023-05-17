@@ -8,7 +8,7 @@ namespace ItGeek.DAL.Enitities
 {
     public class Post :BaseEntity
     {
-        public string Slug { get; set; }
+        public string? Slug { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public User? CreatedBy { get; set; }
