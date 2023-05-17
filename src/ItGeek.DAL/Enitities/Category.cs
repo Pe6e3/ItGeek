@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ItGeek.DAL.Enitities
 {
-    [Keyless]
     public class Category :BaseEntity
     {
         public string? Name{ get; set; }

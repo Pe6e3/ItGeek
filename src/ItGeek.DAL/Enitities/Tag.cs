@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ItGeek.DAL.Enitities
 {
-    public class Tag
+    public class Tag : BaseEntity
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
