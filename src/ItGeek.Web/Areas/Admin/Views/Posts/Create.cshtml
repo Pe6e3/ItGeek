@@ -1,49 +1,64 @@
 ﻿@model ItGeek.Web.Areas.Admin.ViewModels.PostViewModel
 
 @{
-    ViewData["Title"] = "Добавить";
+    ViewData["Title"] = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Добавить</h1>
+<h1>Create</h1>
 
-<h4>Пост</h4>
+<h4>Post</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Slug" class="control-label"></label>
-                <input asp-for="Slug" class="form-control" />
-                <span asp-validation-for="Slug" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostBody" class="control-label"></label>
-                <textarea asp-for="PostBody" class="form-control" />
-                <span asp-validation-for="PostBody" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostImage" class="control-label"></label>
-                <textarea asp-for="PostImage" class="form-control" />
-                <span asp-validation-for="PostImage" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="Slug" class="control-label"></label>
+                        <input asp-for="Slug" class="form-control" />
+                        <span asp-validation-for="Slug" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CommentsClosed" /> @Html.DisplayNameFor(model => model.CommentsClosed)
-                </label>
+            <div class="form-group">
+                <label asp-for="PostBody" class="control-label"></label>
+                <textarea id="myeditor" asp-for="PostBody" class="form-control" rows="10"></textarea>
+                <span asp-validation-for="PostBody" class="text-danger"></span>
             </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="PostImage" class="control-label"></label>
+                        <input asp-for="PostImage" class="form-control" />
+                        <span asp-validation-for="PostImage" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                        </label>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="CommentsClosed" /> @Html.DisplayNameFor(model => model.CommentsClosed)
+                        </label>
+                    </div>
+                </div>
+            </div>
+           
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -52,7 +67,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Вернуться к списку</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

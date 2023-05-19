@@ -13,17 +13,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Slug)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th></th>
-        </tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Slug)</th>
+            <th>@Html.DisplayNameFor(model => model.IsDeleted)</th>
+            <th><th>
     </thead>
     <tbody>
 @foreach (var item in Model) {

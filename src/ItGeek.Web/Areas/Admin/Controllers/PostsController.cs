@@ -26,7 +26,7 @@ namespace ItGeek.Web.Areas.Admin.Controllers
             List<PostViewModel> post = new List<PostViewModel>();
             foreach (var onePost in allPosts)
             {
-                PostContent onePostsContent = allPostsContent.First(x => x.Id == onePost.Id);
+                PostContent onePostsContent = allPostsContent.First(x => x.PostId == onePost.Id);
                 post.Add(new PostViewModel()
                 {
                     Slug = onePost.Slug,
@@ -56,6 +56,12 @@ namespace ItGeek.Web.Areas.Admin.Controllers
         }
 
 
+        public async Task<IActionResult> Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Create(PostViewModel postViewModel)
         {
             Post post = new Post()
@@ -65,56 +71,42 @@ namespace ItGeek.Web.Areas.Admin.Controllers
                 IsDeleted = postViewModel.IsDeleted,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-
             };
             PostContent postContent = new PostContent()
             {
-                Id = postViewModel.Id,
+                PostId = postViewModel.Id,
+                Post = post,
                 Title = postViewModel.Title,
                 PostBody = postViewModel.PostBody,
                 PostImage = postViewModel.PostImage,
                 CommentsNum = 0,
-                CommentsClosed = postViewModel.CommentsClosed,
-
-        };
-        await _uow.PostRepository.InsertAsync(post);
-        await _uow.PostContentRepository.InsertAsync(postContent);
-            return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Post posts)
-    {
-        if (ModelState.IsValid)
-        {
-            await _uow.PostRepository.InsertAsync(posts);
+                CommentsClosed = postViewModel.CommentsClosed
+            };
+            await _uow.PostRepository.InsertAsync(post);
+            await _uow.PostContentRepository.InsertAsync(postContent);
             return RedirectToAction(nameof(Index));
-
         }
-        return View(posts);
-    }
-
-    public async Task<IActionResult> Update(int id)
-    {
-        Post posts = await _uow.PostRepository.GetByIDAsync(id);
-        if (posts == null)
+        public async Task<IActionResult> Update(int id)
         {
-            return NotFound();
+            Post posts = await _uow.PostRepository.GetByIDAsync(id);
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return View(posts);
         }
-        return View(posts);
-    }
 
-    [HttpPost]
-    public async Task<IActionResult> Update(Post posts)
-    {
-        if (ModelState.IsValid)
+        [HttpPost]
+        public async Task<IActionResult> Update(Post posts)
         {
-            await _uow.PostRepository.UpdateAsync(posts);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _uow.PostRepository.UpdateAsync(posts);
+                return RedirectToAction(nameof(Index));
 
+            }
+            return View(posts);
         }
-        return View(posts);
     }
-}
 }
 
