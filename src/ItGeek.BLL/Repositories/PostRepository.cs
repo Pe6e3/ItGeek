@@ -1,14 +1,13 @@
 ﻿using ItGeek.DAL.Data;
 using ItGeek.DAL.Data.Repositories;
-using ItGeek.DAL.Enitities;
+using ItGeek.DAL.Entities;
 using ItGeek.DAL.Interfaces;
 
-namespace ItGeek.BLL.Repositories
+namespace ItGeek.BLL.Repositories;
+
+public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
 {
-    public class PostRepository : GenericRepositoryAsync<Post>, IPostsRepository
+    public PostRepository(AppDbContext db) : base(db)
     {
-        public PostRepository(AppDbContext db) : base(db)
-        {
-        }
     }
 }

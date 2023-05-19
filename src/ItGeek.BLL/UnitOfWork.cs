@@ -13,12 +13,18 @@ public class UnitOfWork
     }
 
     private AuthorRepository _authorRepository;
+    private AuthorSocialRepository _authorSocialRepository;
     private CategoryRepository _categoryRepository;
     private CommentRepository _commentRepository;
+    private MenuItemRepository _menuItemRepository;
+    private MenuRepository _menuRepository;
+    private PostContentRepository _postContentRepository;
     private PostRepository _postRepository;
     private RoleRepository _roleRepository;
     private TagRepository _tagRepository;
+    private UserProfileRepository _userProfileRepository;
     private UserRepository _userRepository;
+
 
     public AuthorRepository AuthorRepository
     {
@@ -31,6 +37,21 @@ public class UnitOfWork
             return _authorRepository;
         }
     }
+
+
+    public AuthorSocialRepository AuthorsSocialRepository
+    {
+        get
+        {
+            if (_authorSocialRepository == null)
+            {
+                _authorSocialRepository = new AuthorSocialRepository(_db);
+            }
+            return _authorSocialRepository;
+        }
+    }
+
+
     public CategoryRepository CategoryRepository
     {
         get
@@ -64,6 +85,19 @@ public class UnitOfWork
             return _postRepository;
         }
     }
+
+    public PostContentRepository PostContentRepository
+    {
+        get
+        {
+            if (_postContentRepository == null)
+            {
+                _postContentRepository = new PostContentRepository(_db);
+            }
+            return _postContentRepository;
+        }
+    }
+
     public RoleRepository RoleRepository
     {
         get
@@ -95,6 +129,40 @@ public class UnitOfWork
                 _userRepository = new UserRepository(_db);
             }
             return _userRepository;
+        }
+    }
+
+    public MenuRepository MenuRepository
+    {
+        get
+        {
+            if (_menuRepository == null)
+            {
+                _menuRepository = new MenuRepository(_db);
+            }
+            return _menuRepository;
+        }
+    }
+    public MenuItemRepository MenuItemRepository
+    {
+        get
+        {
+            if (_menuItemRepository == null)
+            {
+                _menuItemRepository = new MenuItemRepository(_db);
+            }
+            return _menuItemRepository;
+        }
+    }
+    public UserProfileRepository UserProfileRepository
+    {
+        get
+        {
+            if (_userProfileRepository == null)
+            {
+                _userProfileRepository = new UserProfileRepository(_db);
+            }
+            return _userProfileRepository;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using ItGeek.DAL.Enitities;
+﻿using ItGeek.DAL.Entities;
 
 namespace ItGeek.DAL.Interfaces
 {

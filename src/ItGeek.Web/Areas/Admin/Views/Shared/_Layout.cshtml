@@ -55,12 +55,81 @@
             <div class="sidebar-heading">
                 Контент
             </div>
+
+
             <li class="nav-item">
-                <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+                <a class="nav-link" asp-controller="Authors" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Главная</span>
+                    <span>Авторы</span>
                 </a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="AuthorsSocials" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Соцети авторов</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Categories" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Категории</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Comments" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Комментарии</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="MenuItems" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Пункты Меню</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Menus" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Меню</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Posts" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Посты</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Roles" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Роли</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Tags" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Теги</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Users" asp-action="Index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Пользователи</span>
+                </a>
+            </li>
+
+
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -194,14 +263,15 @@
 
     <!-- Bootstrap core JavaScript-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/chart.js/Chart.bundle.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/lib/chart.js/Chart.bundle.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="~/js/admin/sb-admin-2.min.js"></script>
     <script src="~/js/admin/chart-area-demo.js"></script>
 
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

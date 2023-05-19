@@ -1,14 +1,14 @@
 ﻿using ItGeek.BLL;
 using ItGeek.BLL.Repositories;
-using ItGeek.DAL.Enitities;
+using ItGeek.DAL.Entities;
 using ItGeek.Web.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItGeek.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class TagsController : Controller
     {
-
         private readonly UnitOfWork _uow;
         public TagsController(UnitOfWork uow)
         {
@@ -75,4 +75,3 @@ namespace ItGeek.Web.Areas.Admin.Controllers
     }
 }
 
- 
