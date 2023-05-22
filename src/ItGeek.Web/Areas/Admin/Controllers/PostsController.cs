@@ -12,9 +12,13 @@ namespace ItGeek.Web.Areas.Admin.Controllers
     {
 
         private readonly UnitOfWork _uow;
-        public PostsController(UnitOfWork uow)
+        private readonly IWebHostEnvironment _hostEnvironment;
+
+        public PostsController(UnitOfWork uow, IWebHostEnvironment hostEnvironment)
         {
             _uow = uow;
+            _hostEnvironment = hostEnvironment;
+
         }
 
         public async Task<IActionResult> Index()
@@ -64,27 +68,35 @@ namespace ItGeek.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(PostViewModel postViewModel)
         {
-            Post post = new Post()
+            if (ModelState.IsValid)
             {
-                Id = postViewModel.Id,
-                Slug = postViewModel.Slug,
-                IsDeleted = postViewModel.IsDeleted,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-            };
-            PostContent postContent = new PostContent()
-            {
-                PostId = postViewModel.Id,
-                Post = post,
-                Title = postViewModel.Title,
-                PostBody = postViewModel.PostBody,
-                PostImage = postViewModel.PostImage,
-                CommentsNum = 0,
-                CommentsClosed = postViewModel.CommentsClosed
-            };
-            await _uow.PostRepository.InsertAsync(post);
-            await _uow.PostContentRepository.InsertAsync(postContent);
-            return RedirectToAction(nameof(Index));
+                postViewModel.PostImage = ProcessUploadFile(postViewModel).ToString();
+
+
+                Post post = new Post()
+                {
+                    Id = postViewModel.Id,
+                    Slug = postViewModel.Slug,
+                    IsDeleted = postViewModel.IsDeleted,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                };
+                PostContent postContent = new PostContent()
+                {
+                    PostId = postViewModel.Id,
+                    Post = post,
+                    Title = postViewModel.Title,
+                    PostBody = postViewModel.PostBody,
+                    PostImage = postViewModel.PostImage,
+                    CommentsNum = 0,
+                    CommentsClosed = postViewModel.CommentsClosed
+                };
+                await _uow.PostRepository.InsertAsync(post);
+                await _uow.PostContentRepository.InsertAsync(postContent);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(postViewModel);
+
         }
         public async Task<IActionResult> Update(int id)
         {
@@ -106,6 +118,24 @@ namespace ItGeek.Web.Areas.Admin.Controllers
 
             }
             return View(posts);
+        }
+
+        protected async Task<string> ProcessUploadFile(PostViewModel postViewModel)
+        {
+            string uniqueFileName = "";
+            if(postViewModel.ImageFile != null)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(postViewModel.ImageFile.FileName); // Имя без расширения
+                string fileExtension = Path.GetExtension(postViewModel.ImageFile.FileName); // Расширение (с точкой)
+                uniqueFileName = fileName + DateTime.Now.ToString("yymmddssfff") + fileExtension;
+                string path = Path.Combine(wwwRootPath + "/uploads/", uniqueFileName);
+                using(var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await postViewModel.ImageFile.CopyToAsync(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }
