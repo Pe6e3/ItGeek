@@ -50,9 +50,9 @@
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробно</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Update" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
             </td>
         </tr>
 }
