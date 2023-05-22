@@ -70,7 +70,7 @@ namespace ItGeek.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                postViewModel.PostImage = ProcessUploadFile(postViewModel).ToString();
+                postViewModel.PostImage = await ProcessUploadFile(postViewModel);
 
 
                 Post post = new Post()
