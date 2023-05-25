@@ -1,8 +1,5 @@
 ﻿using ItGeek.DAL.Interfaces;
-using ItGeek.DAL.Data;
 using Microsoft.EntityFrameworkCore;
-using Azure;
-using System.Drawing;
 
 namespace ItGeek.DAL.Data.Repositories
 {
@@ -17,11 +14,7 @@ namespace ItGeek.DAL.Data.Repositories
 
 
 
-        public async Task<T> GetByIDAsync(int id)
-        {
-            return await _db.Set<T>().FirstAsync();
-
-        }
+        public async Task<T> GetByIDAsync(int id) => await _db.Set<T>().FindAsync(id);
         public async Task<T> InsertAsync(T entity)
         {
             await _db.Set<T>().AddAsync(entity);
