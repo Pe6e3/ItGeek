@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace ItGeek.DAL.Entities
 {
-    [Keyless]
-    public class PostAuthor
+    public class PostAuthor :BaseEntity
     {
-        public int Id { get; set; }
+        public int PostId { get; set; }
         public int AuthorId { get; set; }
         public Post? Post { get; set; } 
         public Author? Author { get; set; }

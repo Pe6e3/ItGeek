@@ -32,10 +32,10 @@ namespace ItGeek.Web.Areas.Admin.ViewModels
         public IFormFile? ImageFile { get; set; }
 
         [Display(Name = "Категория")]
-        public int? CategoryId { get; set; }
+        public int[] CategoryId { get; set; }
 
         [Display(Name = "Автор")]
-        public int? AuthorId { get; set; }
+        public int[] AuthorId { get; set; }
 
     }
 }

@@ -38,15 +38,54 @@
 
         <div class="form-group">
             <label asp-for="CategoryId" class="control-label"></label>
-            <select class="form-check-label" asp-for="CategoryId" asp-items="ViewBag.Categories">
-                <option>Выберите категорию</option>
+            <select multiple class="form-control" asp-for="CategoryId">
+
+                @foreach (var cat in ViewBag.Categories)
+                {
+                    var isActive = false;
+                    @foreach (int postCat in ViewBag.PostCategories)
+                    {
+                        if (cat.Id == postCat)
+                        {
+                            isActive = true;
+                        }
+                    }
+                    if (isActive)
+                    {
+                        <option class="active" selected value="@cat.Id">@cat.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                }
             </select>
+
+
             <span asp-validation-for="CategoryId" class="text-danger"></span>
 
             <div class="form-group">
                 <label asp-for="AuthorId" class="control-label"></label>
-                <select class="form-check-label" asp-for="AuthorId" asp-items="ViewBag.Authors">
-                    <option>Выберите автора</option>
+                <select multiple class="form-control" asp-for="AuthorId">
+                    @foreach (var auth in ViewBag.Authors)
+                    {
+                        var isActive = false;
+                        @foreach (int postCat in ViewBag.PostAuthors)
+                        {
+                            if (auth.Id == postCat)
+                            {
+                                isActive = true;
+                            }
+                        }
+                        if (isActive)
+                        {
+                            <option class="active" selected value="@auth.Id">@auth.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@auth.Id">@auth.Name</option>
+                        }
+                    }
                 </select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
