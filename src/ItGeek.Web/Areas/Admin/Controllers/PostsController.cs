@@ -4,6 +4,7 @@ using ItGeek.DAL.Entities;
 using ItGeek.Web.Areas.Admin.Controllers;
 using ItGeek.Web.Areas.Admin.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ItGeek.Web.Areas.Admin.Controllers
 {
@@ -77,7 +78,12 @@ namespace ItGeek.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Categories = new SelectList(await _uow.CategoryRepository.ListAllAsync(),"Id", "Name" );
+            ViewBag.Authors = new SelectList(await _uow.AuthorRepository.ListAllAsync(),"Id", "Name" );
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(PostViewModel postViewModel)

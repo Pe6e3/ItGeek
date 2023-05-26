@@ -15,7 +15,8 @@ namespace ItGeek.Web.Controllers
         }
 		public IActionResult Index() =>View();
 
-		public async Task<IActionResult> Post(string categorySlug, string postSlug)
+        //[HttpGet("{categorySlug}/{postSlug}")]  // по этому адресу будет переходить на этот экшн. Например https://localhost:7067/itnews/123
+        public async Task<IActionResult> Post(string categorySlug, string postSlug)
 		{
 			Post postOne = await _uow.PostRepository.GetBySlugAsync(postSlug);
 			Category category = await _uow.CategoryRepository.GetBySlugAsync(categorySlug);
