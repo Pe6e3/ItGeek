@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace ItGeek.Web.Controllers
 {
-    public class AccountController :Controller 
+    public class AccountController : Controller
     {
         private readonly UnitOfWork _uow;
 
@@ -42,15 +42,21 @@ namespace ItGeek.Web.Controllers
         private async Task Authenticate(User user)
         {
             var claims = new List<Claim>
+    {
+        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+    };
+
+            if (user.Role != null) // Проверка наличия роли у пользователя
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.RoleName.ToString())
-            };
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.RoleName.ToString()));
+            }
+
             ClaimsIdentity id = new ClaimsIdentity(
                 claims,
                 "ApplicationCookie",
                 ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
+
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(id),
@@ -61,6 +67,7 @@ namespace ItGeek.Web.Controllers
                 }
             );
         }
+
 
 
         [HttpGet]
@@ -75,12 +82,12 @@ namespace ItGeek.Web.Controllers
             if (ModelState.IsValid)
             {
                 User? user = await _uow.UserRepository.GetByEmailAsync(registerViewModel.Email);
-                if (user != null)
+                if (user == null)
                 {
                     User newuser = new User()
                     {
-                        Email = user.Email,
-                        Password = _uow.UserRepository.PasswordHash(user.Password),
+                        Email = registerViewModel.Email,
+                        Password = _uow.UserRepository.PasswordHash(registerViewModel.Password),
                         RoleId = await _uow.RoleRepository.GetBasicAsync()
                     };
                     await _uow.UserRepository.InsertAsync(newuser);
@@ -92,6 +99,6 @@ namespace ItGeek.Web.Controllers
             }
             return View(registerViewModel);
         }
-
+        
     }
 }

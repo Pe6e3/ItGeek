@@ -17,7 +17,7 @@ namespace ItGeek.BLL.Repositories
 
         public async Task<User?> ValidateLoginPasswordAsync(string email, string password)
         {
-            User user = await _db.Users.Include("Roles").Where(x => x.Email == email).FirstAsync();
+            User user = await _db.Users.Where(x => x.Email == email).FirstAsync();
             if (user == null)
                 return null;
             bool newPassword = BCrypt.Net.BCrypt.Verify(password, user.Password);
@@ -31,7 +31,7 @@ namespace ItGeek.BLL.Repositories
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            User user = await _db.Users.Include("Roles").Where(x => x.Email == email).FirstAsync();
+            User? user = await _db.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
             if (user != null)
                 return user;
             return null;
