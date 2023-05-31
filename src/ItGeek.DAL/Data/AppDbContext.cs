@@ -1,4 +1,5 @@
 ﻿using ItGeek.DAL.Entities;
+using ItGeek.DAL.Enum;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,25 @@ namespace ItGeek.DAL.Data
                 Id=2,
                 Name = "Меню в подвале",
             });
+
+            modelBuilder.Entity<Role>().HasData(new Role
+            {
+                Id = 1,
+                RoleName = RoleName.SuperAdmin,
+            }, new Role
+            {
+                Id = 2,
+                RoleName = RoleName.Admin,
+            }, new Role
+            {
+                Id = 3,
+                RoleName = RoleName.Moderator,
+            }, new Role
+            {
+                Id = 4,
+                RoleName = RoleName.Basic,
+            }
+         );
 
         }
     }
