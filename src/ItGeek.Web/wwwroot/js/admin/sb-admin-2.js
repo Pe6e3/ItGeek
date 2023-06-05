@@ -54,10 +54,6 @@
     });
 
 
-    var textarea = document.getElementById('myeditor');
-    sceditor.create(textarea, {
-        format: 'BBCode',
-    });
 
 })(jQuery); // End of use strict
 

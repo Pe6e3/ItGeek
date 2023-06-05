@@ -27,20 +27,8 @@ public class UnitOfWork
     private PostCategoryRepository _postCategoryRepository;
     private PostAuthorRepository _postAuthorRepository;
 
-
-    public AuthorRepository AuthorRepository
-    {
-        get
-        {
-            if (_authorRepository == null)
-            {
-                _authorRepository = new AuthorRepository(_db);
-            }
-            return _authorRepository;
-        }
-    }
-
-
+public AuthorRepository AuthorRepository => _authorRepository ??= new AuthorRepository(_db);
+    
     public AuthorSocialRepository AuthorsSocialRepository
     {
         get

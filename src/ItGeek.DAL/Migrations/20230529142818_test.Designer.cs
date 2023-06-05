@@ -4,6 +4,7 @@ using ItGeek.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ItGeek.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230529142818_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -395,28 +398,6 @@ namespace ItGeek.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            RoleName = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            RoleName = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            RoleName = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            RoleName = 4
-                        });
                 });
 
             modelBuilder.Entity("ItGeek.DAL.Entities.Tag", b =>
@@ -676,7 +657,7 @@ namespace ItGeek.DAL.Migrations
             modelBuilder.Entity("ItGeek.DAL.Entities.User", b =>
                 {
                     b.HasOne("ItGeek.DAL.Entities.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -708,11 +689,6 @@ namespace ItGeek.DAL.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ItGeek.DAL.Entities.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
