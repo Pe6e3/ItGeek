@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ItGeek.DAL.Entities.Role>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RoleName)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RoleName)
+                                </td>
+                                <td>
+                                    <a class="brn btn-success" asp-action="Update" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
+                                    <a class="brn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye"></i></a>
+                                    <a class="brn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
