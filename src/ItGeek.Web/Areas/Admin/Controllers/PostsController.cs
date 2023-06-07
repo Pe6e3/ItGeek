@@ -233,7 +233,8 @@ public class PostsController : Controller
             // Удалить все существующие теги для данного поста
             await _uow.PostTagRepository.DeleteByPostIdAsync(post.Id);
 
-            string[] tagsNames = postViewModel.TagIds.Split(new char[] { ',' });
+            string[] tagsNames = postViewModel.TagIds?.Split(new char[] { ',' }) ?? new string[0];
+
 
             foreach (string tagName in tagsNames)
             {
