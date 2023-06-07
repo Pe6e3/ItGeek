@@ -120,7 +120,7 @@ public class PostsController : Controller
 
             foreach (string tagName in tagsNames)
             {
-                int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName);
+                int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName.Trim());
                 if (tagId != 0)
                 {
                     PostTag postTag = new PostTag()
@@ -230,18 +230,18 @@ public class PostsController : Controller
             }
             await _uow.PostContentRepository.UpdateAsync(postContent);
 
-            //qwe, qweret, qwe
-            string[] tagsNames = postViewModel.TagIds.Split(new char[] { ',' });
-            // [qwe, qweret, qwe]
+            // Удалить все существующие теги для данного поста
+            await _uow.PostTagRepository.DeleteByPostIdAsync(post.Id);
+
+            string[] tagsNames = postViewModel.TagIds?.Split(new char[] { ',' }) ?? new string[0];
+
 
             foreach (string tagName in tagsNames)
             {
-                //tagName = qwe
-                int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName);
-                // tagId = 5
+                int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName.Trim());
                 if (tagId != 0)
                 {
-                    bool havePostTag = await _uow.PostTagRepository.GetByTagIdAsync(post.Id, tagId);
+                    bool havePostTag = await _uow.PostTagRepository.CheckTagInPost(post.Id, tagId);     //GetByTagIdAsync - старое название метода
                     if (!havePostTag)
                     {
                         PostTag postTag = new PostTag()
