@@ -115,6 +115,23 @@ public class PostsController : Controller
             await _uow.PostRepository.InsertAsync(post);
             await _uow.PostContentRepository.InsertAsync(postContent);
 
+
+            string[] tagsNames = postViewModel.TagIds.Split(new char[] { ',' });
+
+            foreach (string tagName in tagsNames)
+            {
+                int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName);
+                if (tagId != 0)
+                {
+                    PostTag postTag = new PostTag()
+                    {
+                        PostId = post.Id,
+                        TagId = tagId
+                    };
+                    await _uow.PostTagRepository.InsertAsync(postTag);
+                }
+            }
+
             foreach (int catId in postViewModel.CategoryId)
             {
 
@@ -158,6 +175,7 @@ public class PostsController : Controller
         }
         PostContent postContent = await _uow.PostContentRepository.GetByPostIDAsync(id);
 
+        string tagNames = await _uow.PostTagRepository.GetByPostIdAsync(id);
 
         PostViewModel postViewModel = new PostViewModel()
         {
@@ -168,6 +186,7 @@ public class PostsController : Controller
             PostBody = postContent.PostBody,
             PostImage = postContent.PostImage,
             CommentsClosed = postContent.CommentsClosed,
+            TagIds = tagNames,
         };
         ViewBag.Authors = await _uow.AuthorRepository.ListAllAsync();
         ViewBag.Categories = await _uow.CategoryRepository.ListAllAsync();
@@ -210,6 +229,30 @@ public class PostsController : Controller
                 //TODO удалить старую картинку
             }
             await _uow.PostContentRepository.UpdateAsync(postContent);
+
+            //qwe, qweret, qwe
+            string[] tagsNames = postViewModel.TagIds.Split(new char[] { ',' });
+            // [qwe, qweret, qwe]
+
+            foreach (string tagName in tagsNames)
+            {
+                //tagName = qwe
+                int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName);
+                // tagId = 5
+                if (tagId != 0)
+                {
+                    bool havePostTag = await _uow.PostTagRepository.GetByTagIdAsync(post.Id, tagId);
+                    if (!havePostTag)
+                    {
+                        PostTag postTag = new PostTag()
+                        {
+                            PostId = post.Id,
+                            TagId = tagId
+                        };
+                        await _uow.PostTagRepository.InsertAsync(postTag);
+                    }
+                }
+            }
 
             return RedirectToAction(nameof(Index));
         }
