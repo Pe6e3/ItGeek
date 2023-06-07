@@ -314,14 +314,19 @@ namespace ItGeek.DAL.Migrations
 
             modelBuilder.Entity("ItGeek.DAL.Entities.PostComment", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("CommentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
                     b.HasIndex("CommentId");
 
@@ -366,13 +371,18 @@ namespace ItGeek.DAL.Migrations
             modelBuilder.Entity("ItGeek.DAL.Entities.PostTag", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("PostId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.Property<int>("TagId")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
@@ -638,7 +648,9 @@ namespace ItGeek.DAL.Migrations
 
                     b.HasOne("ItGeek.DAL.Entities.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Comment");
 
@@ -660,7 +672,9 @@ namespace ItGeek.DAL.Migrations
                 {
                     b.HasOne("ItGeek.DAL.Entities.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ItGeek.DAL.Entities.Tag", "Tag")
                         .WithMany()

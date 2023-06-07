@@ -26,8 +26,11 @@ public class UnitOfWork
     private UserRepository _userRepository;
     private PostCategoryRepository _postCategoryRepository;
     private PostAuthorRepository _postAuthorRepository;
+    private PostTagRepository _postTagRepository;
 
-public AuthorRepository AuthorRepository => _authorRepository ??= new AuthorRepository(_db);
+
+
+    public AuthorRepository AuthorRepository => _authorRepository ??= new AuthorRepository(_db);
     
     public AuthorSocialRepository AuthorsSocialRepository
     {
@@ -180,4 +183,16 @@ public AuthorRepository AuthorRepository => _authorRepository ??= new AuthorRepo
         }
     }
 
+
+    public PostTagRepository PostTagRepository
+    {
+        get
+        {
+            if (_postTagRepository == null)
+            {
+                _postTagRepository = new PostTagRepository(_db);
+            }
+            return _postTagRepository;
+        }
+    }
 }
