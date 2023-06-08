@@ -14,6 +14,25 @@ public class PostAuthorRepository : GenericRepositoryAsync<PostAuthor>, IPostAut
     {
         _db = db;
     }
+
+    public async Task<bool> CheckAuthorInPost(int postId, int authorId)
+    {
+        return await _db.PostAuthors
+            .AnyAsync(pa => pa.PostId == postId && pa.AuthorId == authorId);
+    }
+
+
+    public async Task DeleteByPostIdAsync(int postId)
+    {
+        var postAuthors = await _db.PostAuthors
+            .Where(pa => pa.PostId == postId)
+            .ToListAsync();
+
+        _db.PostAuthors.RemoveRange(postAuthors);
+        await _db.SaveChangesAsync();
+    }
+
+
     public async Task<int[]> ListByPostIdAsync(int postId)
     {
         List<PostAuthor> postAuthors = await _db.PostAuthors.Where(x => x.PostId == postId).ToListAsync();

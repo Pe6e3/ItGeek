@@ -97,6 +97,19 @@
                 </select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
+
+            @*// перенести с верхней в нижнюю активные пункты*@
+
+            <div class="form-group">
+                <label for="authorIds">Авторы</label>
+                <select id="authorIds" name="authorIds" class="form-control" multiple>
+                    @foreach (var author in ViewBag.Authors)
+                    {
+                        <option value="@author.Id">@author.Name</option>
+                    }
+                </select>
+            </div>
+
         </div>
     </div>
 

@@ -199,7 +199,7 @@ public class PostsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Update(PostViewModel postViewModel)
+    public async Task<IActionResult> Update(PostViewModel postViewModel, int[] authorIds)
     {
         if (ModelState.IsValid)
         {
@@ -208,7 +208,7 @@ public class PostsController : Controller
             post.Slug = postViewModel.Slug;
             post.IsDeleted = postViewModel.IsDeleted;
             post.UpdatedAt = DateTime.Now;
-            //TODO: post.EditedBy = User;
+            // TODO: post.EditedBy = User;
 
             await _uow.PostRepository.UpdateAsync(post);
 
@@ -226,8 +226,9 @@ public class PostsController : Controller
                 string newImage = await ProcessUploadFile(postViewModel);
                 postContent.PostImage = newImage;
 
-                //TODO удалить старую картинку
+                // TODO: удалить старую картинку
             }
+
             await _uow.PostContentRepository.UpdateAsync(postContent);
 
             // Удалить все существующие теги для данного поста
@@ -235,13 +236,12 @@ public class PostsController : Controller
 
             string[] tagsNames = postViewModel.TagIds?.Split(new char[] { ',' }) ?? new string[0];
 
-
             foreach (string tagName in tagsNames)
             {
                 int tagId = await _uow.PostTagRepository.GetTagIdByName(tagName.Trim());
                 if (tagId != 0)
                 {
-                    bool havePostTag = await _uow.PostTagRepository.CheckTagInPost(post.Id, tagId);     //GetByTagIdAsync - старое название метода
+                    bool havePostTag = await _uow.PostTagRepository.CheckTagInPost(post.Id, tagId);
                     if (!havePostTag)
                     {
                         PostTag postTag = new PostTag()
@@ -254,8 +254,26 @@ public class PostsController : Controller
                 }
             }
 
+            // Удалить всех существующих авторов для данного поста
+            await _uow.PostAuthorRepository.DeleteByPostIdAsync(post.Id);
+
+            foreach (int authorId in authorIds)
+            {
+                bool havePostAuthor = await _uow.PostAuthorRepository.CheckAuthorInPost(post.Id, authorId);
+                if (!havePostAuthor)
+                {
+                    PostAuthor postAuthor = new PostAuthor()
+                    {
+                        PostId = post.Id,
+                        AuthorId = authorId
+                    };
+                    await _uow.PostAuthorRepository.InsertAsync(postAuthor);
+                }
+            }
+
             return RedirectToAction(nameof(Index));
         }
+
         ViewBag.Authors = await _uow.AuthorRepository.ListAllAsync();
         ViewBag.Categories = await _uow.CategoryRepository.ListAllAsync();
         ViewBag.PostCategories = await _uow.PostCategoryRepository.ListByPostIdAsync(postViewModel.Id);
@@ -264,6 +282,7 @@ public class PostsController : Controller
         ViewBag.AuthorCount = ((IEnumerable<int>)ViewBag.PostAuthors).ToList().Count;
         return View(postViewModel);
     }
+
 
 
 

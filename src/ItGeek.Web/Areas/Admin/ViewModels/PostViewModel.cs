@@ -1,10 +1,9 @@
-﻿using ItGeek.DAL.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ItGeek.Web.Areas.Admin.ViewModels
 {
-    public class PostViewModel
+	public class PostViewModel
     {
         public int Id { get; set; }
         //from Post

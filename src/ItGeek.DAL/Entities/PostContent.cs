@@ -9,5 +9,6 @@
         public string? PostImage { get; set; }
         public int CommentsNum { get; set; }
         public bool CommentsClosed { get; set; }
+
     }
 }
