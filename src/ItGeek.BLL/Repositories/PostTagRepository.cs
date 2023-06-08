@@ -15,7 +15,7 @@ public class PostTagRepository : GenericRepositoryAsync<PostTag>, IPostTagReposi
         _db = db;
     }
 
-    public async Task DeleteByPostIdAsync(int postId)
+    public async Task DeleteTagsByPostIdAsync(int postId)
     {
         List<PostTag> postTags = await _db.PostTags
             .Where(pt => pt.PostId == postId)

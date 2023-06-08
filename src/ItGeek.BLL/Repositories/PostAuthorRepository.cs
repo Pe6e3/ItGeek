@@ -22,7 +22,7 @@ public class PostAuthorRepository : GenericRepositoryAsync<PostAuthor>, IPostAut
     }
 
 
-    public async Task DeleteByPostIdAsync(int postId)
+    public async Task DeleteAuthorsByPostIdAsync(int postId)
     {
         var postAuthors = await _db.PostAuthors
             .Where(pa => pa.PostId == postId)

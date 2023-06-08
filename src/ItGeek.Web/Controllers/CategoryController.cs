@@ -20,7 +20,6 @@ namespace ItGeek.Web.Controllers
 			Category cat = await _uow.CategoryRepository.GetBySlugAsync(categorySlug);
 			ViewBag.Category = cat;
 			List<PostCategory> catPosts = await _uow.PostRepository.ListByCategoryIdAsync(cat.Id);
-
 			List<PostViewModel> catPostContents = new List<PostViewModel>();
 
 			foreach (PostCategory postCategory in catPosts)
