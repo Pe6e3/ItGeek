@@ -1,7 +1,8 @@
 ﻿using ItGeek.BLL;
 using Microsoft.AspNetCore.Mvc;
 
-[ViewComponent(Name = "_Menu")]
+//здесь имя папки в Components, в которой должно лежать представоение Default.cshtml
+[ViewComponent(Name = "_Menu")] 
 public class MenuViewComponent : ViewComponent
 {
     private readonly UnitOfWork _uow;
