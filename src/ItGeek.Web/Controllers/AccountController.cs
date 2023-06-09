@@ -44,6 +44,7 @@ namespace ItGeek.Web.Controllers
             var claims = new List<Claim>
     {
         new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+        new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleId.ToString()),
     };
 
             if (user.Role != null) // Проверка наличия роли у пользователя

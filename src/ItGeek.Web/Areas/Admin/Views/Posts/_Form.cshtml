@@ -73,8 +73,8 @@
             <span asp-validation-for="CategoryId" class="text-danger"></span>
 
             <div class="form-group">
-                <label for="authorIds">Авторы</label>
-                <select id="authorIds" name="authorIds" class="form-control" multiple>
+                <label for="AuthorId">Авторы</label>
+                <select id="AuthorId" name="AuthorId" class="form-control" multiple>
                     @foreach (var author in ViewBag.Authors)
                     {
                         var isActive = false;

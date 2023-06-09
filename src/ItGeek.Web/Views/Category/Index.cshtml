@@ -1,81 +1,24 @@
-﻿@model IEnumerable<ItGeek.Web.Areas.Admin.ViewModels.PostViewModel>
-
+﻿@model ItGeek.DAL.Entities.Category
 @{
-    ViewBag.Title = ViewBag.Category.Name;
+	ViewBag.Title = Model.Name;
 }
+
+
 <div class="pattern pattern-cat-header">
-    <div class="cat-header overlay" style="background-image: url('/uploads/@(ViewBag.Category.CategoryImage)')">
-
-        <div class="container">
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="cat-header-block">
-                        <h1>@ViewBag.Category.Name</h1>
-                        <p>@ViewBag.Category.Description</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="cat-header overlay" style="background-image: url('/uploads/@Model.CategoryImage')">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-7">
+					<div class="cat-header-block">
+						<h1>@Model.Name</h1>
+						<p>@Model.Description</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<h1>Список всех постов категории @ViewBag.Category.Name </h1>
-
-<div class="container">
-
-    <div class="row">
-        <div class="col">
-
-            <table class="table table-bordered dataTable" id="myTable">
-                <thead>
-                    <tr>
-                        <th style="width:200px;">@Html.DisplayNameFor(model => model.PostImage)</th>
-                        <th>@Html.DisplayNameFor(model => model.Title)</th>
-                        <th>@Html.DisplayNameFor(model => model.Slug)</th>
-                        <th style="width:40px;">@Html.DisplayNameFor(model => model.IsDeleted)</th>
-                        <th style="width:140px;"> Действия</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <th><img src="~/uploads/@item.PostImage" style="width: 100%; border-radius:8px;" /></th>
-                            <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Slug)</td>
-                            <td class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.IsDeleted)</td>
-                            <td>
-                                <a class="btn btn-success" asp-action="Update" asp-route-id="@item.Id"><i class="fa fa-pen"></i></a>
-                                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-eye"></i></a>
-                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-trash"></i></a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-
-
-@section Scripts {
-    <link href="~/lib/datatables//dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
-    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/lib/datatables/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable({
-                language: {
-                    url: '/js/admin/ru.json',
-                },
-            });
-        });
-    </script>
-}
-
-@*
 <div class="cat-list-first">
 	<div class="container">
 
@@ -87,18 +30,23 @@
 			<div class="row">
 
 				<div class="col-md-7">
-					<div class="type-one-first">
-						<a href="#" title="Как создать красивое освещение в виде шариков в своём доме">
-							<img src="img/blog/diy/1.jpg" alt="alt" class="img-responsive img-width">
-						</a>
-						<div class="item-social">
-							<div class="item-comments" title="Количество комментариев">
-								<i class="fa fa-comment"></i><a class="item-comments-count" href="#disqus_thread">26</a>
-								<span class="date">06/12/2023</span>
+					@foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
+					{
+						<div class="type-one-first">
+							<a href="#" title="Как создать красивое освещение в виде шариков в своём доме">
+								<img src="img/blog/diy/1.jpg" alt="alt" class="img-responsive img-width">
+							</a>
+							<div class="item-social">
+								<div class="item-comments" title="Количество комментариев">
+									<i class="fa fa-comment"></i><a class="item-comments-count" href="#disqus_thread">26</a>
+									<span class="date">06/12/2023</span>
+								</div>
 							</div>
+							<h3><a href="#">@post.PostContents.Title</a></h3>
 						</div>
-						<h3><a href="#">Как создать красивое освещение в виде шариков в своём доме</a></h3>
-					</div>
+						break;
+					}
+
 				</div>
 
 				<div class="col-md-5 item-title-white">
@@ -148,21 +96,24 @@
 				<div class="cat-list-wrap">
 
 					<div class="cat-list-wrap">
-
-						<a href="#" class="cat-list-item">
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="pattern">
-										<img src="img/blog/news/6.jpg" alt="Alt" class="img-responsive overlay">
+						@foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
+						{
+							<a href="#" class="cat-list-item">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="pattern">
+											<img src="img/blog/news/6.jpg" alt="Alt" class="img-responsive overlay">
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<h3>@post.PostContents.Title</h3>
+										<div class="date">21/06/2023</div>
+										<p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
 									</div>
 								</div>
-								<div class="col-sm-6">
-									<h3>Золотистый iPhone предыдущего поколения положили на тыкву. Потрясающие снимки на Android.</h3>
-									<div class="date">21/06/2023</div>
-									<p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-								</div>
-							</div>
-						</a>
+							</a>
+						}
+						
 
 						<a href="#" class="cat-list-item">
 							<div class="row">
@@ -404,17 +355,18 @@
 
 		</div>
 	</div>
-*@
-<section class="pagination-section text-center d-none d-md-block">
-    <a href="#" class="button">Следующая страница <i class="fa fa-angle-double-right"></i></a>
-    <div class="pagination">
-        <span class="pagination-left" title="Предыдущая страница">&laquo;</span>
-        <span class="active">1</span>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#" class="pagination-right" title="Следующая страница">&raquo;</a>
-    </div>
-</section>
 
+	<section class="pagination-section text-center d-none d-md-block">
+		<a href="#" class="button">Следующая страница <i class="fa fa-angle-double-right"></i></a>
+		<div class="pagination">
+			<span class="pagination-left" title="Предыдущая страница">&laquo;</span>
+			<span class="active">1</span>
+			<a href="#">2</a>
+			<a href="#">3</a>
+			<a href="#">4</a>
+			<a href="#">5</a>
+			<a href="#" class="pagination-right" title="Следующая страница">&raquo;</a>
+		</div>
+	</section>
+
+</div>
