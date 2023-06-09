@@ -64,7 +64,7 @@ namespace ItGeek.Web.Controllers
                 new AuthenticationProperties
                 {
                     IsPersistent = true,
-                    ExpiresUtc = DateTime.UtcNow.AddMinutes(1)
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(3600)
                 }
             );
         }

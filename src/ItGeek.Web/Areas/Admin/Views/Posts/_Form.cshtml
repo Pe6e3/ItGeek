@@ -60,7 +60,7 @@
                     }
                     if (isActive)
                     {
-                        <option class="active"   value="@cat.Id">@cat.Name</option>
+                        <option class="active" selected value="@cat.Id">@cat.Name</option>
                     }
                     else
                     {
@@ -68,8 +68,6 @@
                     }
                 }
             </select>
-
-
             <span asp-validation-for="CategoryId" class="text-danger"></span>
 
             <div class="form-group">

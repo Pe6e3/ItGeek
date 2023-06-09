@@ -55,4 +55,33 @@ public class PostTagRepository : GenericRepositoryAsync<PostTag>, IPostTagReposi
             await _db.SaveChangesAsync();
 		}
     }
+
+    public async Task DeleteTagsByPostIdAsync(int postId)
+    {
+        List<PostTag> postTags = await _db.PostTags
+            .Where(pt => pt.PostId == postId)
+            .ToListAsync();
+
+        if (postTags.Any())
+        {
+            _db.PostTags.RemoveRange(postTags);
+            await _db.SaveChangesAsync();
+        }
+    }
+
+    public Task<bool> CheckTagInPost(int postId, int tagId) => _db.PostTags.AnyAsync(x => x.PostId == postId && x.TagId == tagId);
+
+
+    public async Task DeleteTagsByPostIAsync(int postId)
+    {
+        List<PostTag> postTags = await _db.PostTags
+            .Where(pt => pt.PostId == postId)
+            .ToListAsync();
+
+        if (postTags.Any())
+        {
+            _db.PostTags.RemoveRange(postTags);
+            await _db.SaveChangesAsync();
+        }
+    }
 }

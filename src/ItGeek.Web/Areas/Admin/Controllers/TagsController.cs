@@ -1,77 +1,52 @@
-﻿using ItGeek.BLL;
-using ItGeek.BLL.Repositories;
+﻿using ItGeek.DAL.Data;
 using ItGeek.DAL.Entities;
-using ItGeek.Web.Areas.Admin.Controllers;
-using Microsoft.AspNetCore.Mvc;
+using ItGeek.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace ItGeek.Web.Areas.Admin.Controllers
+namespace ItGeek.BLL.Repositories;
+
+public class PostTagRepository : GenericRepositoryAsync<PostTag>, IPostTagRepository
 {
-    [Area("Admin")]
-    public class TagsController : Controller
+    private readonly AppDbContext _db;
+
+    public PostTagRepository(AppDbContext db) : base(db)
     {
-        private readonly UnitOfWork _uow;
-        public TagsController(UnitOfWork uow)
+        _db = db;
+    }
+
+    public async Task DeleteTagsByPostIdAsync(int postId)
+    {
+        List<PostTag> postTags = await _db.PostTags
+            .Where(pt => pt.PostId == postId)
+            .ToListAsync();
+
+        if (postTags.Any())
         {
-            _uow = uow;
-        }
-        public async Task<IActionResult> Index()
-        {
-            return View(await _uow.TagRepository.ListAllAsync());
-        }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            return View(await _uow.TagRepository.GetByIDAsync(id));
-        }
-        public async Task<IActionResult> Delete(int id)
-        {
-            Tag tags = await _uow.TagRepository.GetByIDAsync(id);
-            if (tags != null)
-                await _uow.TagRepository.DeleteAsync(tags);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        public async Task<IActionResult> Create()
-        {
-
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(Tag tags)
-        {
-            if (ModelState.IsValid)
-            {
-                await _uow.TagRepository.InsertAsync(tags);
-                return RedirectToAction(nameof(Index));
-
-            }
-            return View(tags);
-        }
-
-        public async Task<IActionResult> Update(int id)
-        {
-            Tag tags = await _uow.TagRepository.GetByIDAsync(id);
-            if (tags == null)
-            {
-                return NotFound();
-            }
-            return View(tags);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update(Tag tags)
-        {
-            if (ModelState.IsValid)
-            {
-                await _uow.TagRepository.UpdateAsync(tags);
-                return RedirectToAction(nameof(Index));
-
-            }
-            return View(tags);
+            _db.PostTags.RemoveRange(postTags);
+            await _db.SaveChangesAsync();
         }
     }
-}
 
+
+    public async Task<string> GetByPostIdAsync(int postId)
+    {
+        string tags = "";
+        List<PostTag> postTags = await _db.PostTags.Include(x => x.Tag).Where(x => x.PostId == postId).ToListAsync();
+        if (postTags != null)
+            foreach (PostTag postTag in postTags)
+                tags += postTag.Tag.Name + ", ";
+        return tags;
+    }
+
+    //GetByTagIdAsync
+    public Task<bool> CheckTagInPost(int postId, int tagId) => _db.PostTags.AnyAsync(x => x.PostId == postId && x.TagId == tagId);
+
+
+    public async Task<int> GetTagIdByName(string tagName)
+    {
+        Tag tag = await _db.Tags.Where(x => x.Name == tagName).FirstOrDefaultAsync();
+        if (tag != null)
+            return tag.Id;
+        return 0;
+    }
+}

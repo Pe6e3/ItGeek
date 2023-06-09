@@ -1,5 +1,6 @@
 ﻿using ItGeek.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Diagnostics;
 
 namespace ItGeek.Web.Controllers
@@ -32,6 +33,12 @@ namespace ItGeek.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public PartialViewResult Menu()
+        {
+
+            return PartialView("_Header");
         }
     }
 }
