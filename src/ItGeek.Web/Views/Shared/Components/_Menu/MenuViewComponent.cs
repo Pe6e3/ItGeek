@@ -1,7 +1,7 @@
 ﻿using ItGeek.BLL;
 using Microsoft.AspNetCore.Mvc;
 
-[ViewComponent(Name = "Menu")]
+[ViewComponent(Name = "_Menu")]
 public class MenuViewComponent : ViewComponent
 {
     private readonly UnitOfWork _uow;

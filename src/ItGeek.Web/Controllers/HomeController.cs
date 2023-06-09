@@ -37,7 +37,7 @@ namespace ItGeek.Web.Controllers
 
 		public IViewComponentResult Invoke()
 		{
-			return (IViewComponentResult)ViewComponent("_Header");
+			return (IViewComponentResult)ViewComponent("Menu");
 		}
 
 
