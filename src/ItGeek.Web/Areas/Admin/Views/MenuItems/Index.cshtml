@@ -10,7 +10,7 @@
         <h1 class="h3 mb-4 text-gray-800">@ViewData["Title"]</h1>
     </div>
     <div class="col-2 text-right">
-        <a asp-action="Create" asp-route-menuid="@ViewBag.Id" class="btn btn-success">Новый пункт меню</a>
+        <a asp-action="Create" asp-route-menuid="@ViewBag.Id" class="btn btn-success">Новая</a>
     </div>
 </div>
 
@@ -22,16 +22,13 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Menu)
+                                @Html.DisplayNameFor(model => model.Position)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Slug)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Position)
                             </th>
                             <th style="width: 180px"></th>
                         </tr>
@@ -41,7 +38,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Menu.Name)
+                                    @Html.DisplayFor(modelItem => item.Position)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
@@ -50,10 +47,8 @@
                                     @Html.DisplayFor(modelItem => item.Slug)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Position)
-                                </td>
-                                <td>
-                                    <a class="btn btn-success" asp-action="Update" asp-route-id="@item.Id" asp-route-menuid="@item.MenuId">
+                                    <a class="btn btn-success" asp-action="Update" asp-route-id="@item.Id"
+                                   asp-route-menuid="@item.MenuId">
                                         <i class="fa fa-pen"></i>
                                     </a>
                                     <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">

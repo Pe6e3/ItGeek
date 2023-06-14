@@ -18,7 +18,7 @@ public class PostsController : Controller
         _hostEnvironment = hostEnvironment;
 
     }
-
+        
     public async Task<IActionResult> Index()
     {
         List<Post> allPosts = (List<Post>)await _uow.PostRepository.ListAllAsync();
