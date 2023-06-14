@@ -14,8 +14,12 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
         _db = db;
     }
 
-    public async Task<Category> GetBySlugAsync(string slug)
-    {
-        return await _db.Categories.Include(x => x.Posts).ThenInclude(i => i.PostContents).Where(x => x.Slug == slug).FirstAsync();
-    }
+    public async Task<Category> GetBySlugAsync(string categorySlug) => await
+        _db.Categories
+        .Include(x => x.Posts)
+        .ThenInclude(i => i.PostContents)
+        //.Where(x => x.Slug == categorySlug).FirstAsync();
+        .Where(x => x.Slug == categorySlug).FirstOrDefaultAsync();
+
+
 }
