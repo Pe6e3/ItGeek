@@ -1,74 +1,17 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <base href="/" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>@ViewData["Title"] - ITGEEK - Новости из мира IT</title>
-
-
-    <meta name="description"
-          content="Новости электроники, технологий, современных гаджетов, и другая актуальная информация современной IT индустрии" />
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- Template Basic Images Start -->
-    <meta property="og:image" content="path/to/image.jpg" />
-    <link rel="icon" href="img/favicon/favicon.ico" />
-    <link rel="apple-touch-icon"
-          sizes="180x180"
-          href="img/favicon/apple-touch-icon-180x180.png" />
-    <!-- Template Basic Images End -->
-    <!-- Custom Browsers Color Start -->
-    <meta name="theme-color" content="#202222" />
-    <!-- Custom Browsers Color End -->
-
-    <link rel="stylesheet" href="css/main.min.css" />
-
-</head>
+@await Html.PartialAsync("_Head")
 <body>
-
 
     @await Component.InvokeAsync("_Menu") @*здесь имя папки в Components, в которой должно лежать представоение Default.cshtml*@
 
-
-    <main role="main">
-        @RenderBody()
-    </main>
+    <main role="main"> @RenderBody() </main>
 
     @Html.Partial("_Footer")
 
 
 
-    <script src="~/js/scripts.min.js" asp-append-version="true"></script>
- 
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/scripts.min.js" asp-append-version="true"></script>
 </body>
 </html>
-
-<style>
-    /* Styles for validation helpers
-            -----------------------------------------------------------*/
-    .field-validation-error {
-        color: #f00;
-    }
-
-    .field-validation-valid {
-        display: none;
-    }
-
-    .input-validation-error {
-        border: 1px solid #f00;
-        background-color: #fee;
-    }
-
-    .validation-summary-errors {
-        font-weight: bold;
-        color: #f00;
-    }
-
-    .validation-summary-valid {
-        display: none;
-    }
-</style>
