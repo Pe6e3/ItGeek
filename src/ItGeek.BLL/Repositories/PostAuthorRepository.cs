@@ -7,26 +7,26 @@ namespace ItGeek.BLL.Repositories;
 
 public class PostAuthorRepository : GenericRepositoryAsync<PostAuthor>, IPostAuthorRepository
 {
-	private readonly AppDbContext _db;
+    private readonly AppDbContext _db;
 
-	public PostAuthorRepository(AppDbContext db) : base(db)
-	{
-		_db = db;
-	}
+    public PostAuthorRepository(AppDbContext db) : base(db)
+    {
+        _db = db;
+    }
 
-	public async Task<int[]> ListByPostIdAsync(int postId)
-	{
-		List<PostAuthor> postAuthors = await _db.PostAuthors.Where(x => x.PostId == postId).ToListAsync();
+    public async Task<int[]> ListByPostIdAsync(int postId)
+    {
+        List<PostAuthor> postAuthors = await _db.PostAuthors.Where(x => x.PostId == postId).ToListAsync();
 
-		int[] result = new int[postAuthors.Count];
+        int[] result = new int[postAuthors.Count];
 
-		for (int i = 0; i < postAuthors.Count; i++)
-		{
-			result[i] = postAuthors[i].AuthorId;
-		}
+        for (int i = 0; i < postAuthors.Count; i++)
+        {
+            result[i] = postAuthors[i].AuthorId;
+        }
 
-		return result;
-	}
+        return result;
+    }
     public async Task DeleteAuthorsByPostIdAsync(int postId)
     {
         List<PostAuthor> postAuthors = await _db.PostAuthors.Where(x => x.PostId == postId).ToListAsync();
@@ -45,6 +45,9 @@ public class PostAuthorRepository : GenericRepositoryAsync<PostAuthor>, IPostAut
             .AnyAsync(pa => pa.PostId == postId && pa.AuthorId == authorId);
     }
 
-
-   
+    public async Task<int> RandomAuthorId()
+    {
+        Author? author = await _db.Authors.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync();
+        return author != null ? author.Id : 1;
+    }
 }

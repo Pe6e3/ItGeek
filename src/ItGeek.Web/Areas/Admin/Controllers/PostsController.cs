@@ -2,6 +2,7 @@
 using ItGeek.DAL.Entities;
 using ItGeek.Web.Areas.Admin.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace ItGeek.Web.Areas.Admin.Controllers;
 
@@ -18,7 +19,7 @@ public class PostsController : Controller
         _hostEnvironment = hostEnvironment;
 
     }
-        
+
     public async Task<IActionResult> Index()
     {
         List<Post> allPosts = (List<Post>)await _uow.PostRepository.ListAllAsync();
@@ -336,4 +337,64 @@ public class PostsController : Controller
         return Json(res);
     }
 
+    public async Task<IActionResult> GenerateRandomPosts(int count = 1)
+    {
+        for (int i = 0; i < count; i++)
+        {
+
+            Post post = new Post();
+            PostContent content = new PostContent();
+            PostCategory postCat = new PostCategory();
+            PostAuthor postAuthor = new PostAuthor();
+            PostTag postTag = new PostTag();
+            Random random = new Random();
+
+
+            //post.Id = await _uow.PostRepository.RandomPostId();  // возможно стоит убрать?
+            post.Slug = await GetRandomWords(1);
+            post.CreatedAt = DateTime.Now;
+            //post.CreatedBy =
+            await _uow.PostRepository.InsertAsync(post);
+
+            content.Title = await GetRandomWords(3);
+            content.PostBody = await GetRandomWords(50);
+            content.PostImage = random.Next(1, 32).ToString() + ".jpg";
+            content.PostId = post.Id;
+
+            postCat.PostId = post.Id;
+            postCat.CategoryId = await _uow.CategoryRepository.RandomCatId();
+
+            postAuthor.PostId=post.Id;
+            postAuthor.AuthorId = await _uow.PostAuthorRepository.RandomAuthorId();
+
+            postTag.PostId = post.Id;
+            postTag.TagId = await _uow.PostTagRepository.RandomTagId();
+
+            await _uow.PostAuthorRepository.InsertAsync(postAuthor);
+            await _uow.PostCategoryRepository.InsertAsync(postCat);
+            await _uow.PostContentRepository.InsertAsync(content);
+            await _uow.PostTagRepository.InsertAsync(postTag);
+
+        }
+        return RedirectToAction("Index");
+    }
+
+    static async Task<string> GetRandomWords(int count)
+    {
+        string[] words = new string[count];
+        string space = count > 1 ? " " : "";
+        using (HttpClient client = new HttpClient())
+        {
+            string apiUrl = $"https://random-word-api.herokuapp.com/word?number={count}";
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                words = JsonSerializer.Deserialize<string[]>(jsonResponse);
+            }
+            else
+                throw new Exception("Failed to retrieve random words.");
+        }
+        return string.Join(space, words);
+    }
 }

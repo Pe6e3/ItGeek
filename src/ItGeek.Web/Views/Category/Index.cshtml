@@ -3,7 +3,6 @@
     ViewBag.Title = Model.Name;
 }
 
-
 <div class="pattern pattern-cat-header">
     <div class="cat-header overlay" style="background-image: url('/uploads/@Model.CategoryImage')">
         <div class="container">
@@ -33,16 +32,16 @@
                     @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
                     {
                         <div class="type-one-first">
-                            <a href="#" title="Как создать красивое освещение в виде шариков в своём доме">
-                                <img src="img/blog/diy/1.jpg" alt="alt" class="img-responsive img-width">
+                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" title="@post.PostContents.Title">
+                                <img src="/uploads/@post.PostContents.PostImage" alt="alt" class="img-responsive img-width">
                             </a>
                             <div class="item-social">
                                 <div class="item-comments" title="Количество комментариев">
-                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#disqus_thread">26</a>
-                                    <span class="date">06/12/2023</span>
+                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@post.PostContents.CommentsNum</a>
+                                    <span class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</span>
                                 </div>
                             </div>
-                            <h3><a href="#">@post.PostContents.Title</a></h3>
+                            <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug">@post.PostContents.Title</a></h3>
                         </div>
                         break;
                     }
@@ -50,21 +49,28 @@
                 </div>
 
                 <div class="col-md-5 item-title-white">
+                    @{
+                        int x = 1;
+                    }
                     @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
                     {
+                        if (x++ == 1)
+                            continue;
                         <div class="pattern">
-                            <div class="overlay item-title" style="background-image: url(img/blog/diy/2.jpg)">
+                            <div class="overlay item-title" style="background-image: url('/uploads/@post.PostContents.PostImage')">
                                 <div class="item-title-content">
-                                    <h3><a href="#">Красивая аутентичная буква а на стол своими руками</a></h3>
+                                    <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug">@post.PostContents.Title</a></h3>
                                     <div class="item-social">
                                         <div class="item-comments" title="Количество комментариев">
-                                            <i class="fa fa-comment"></i><a class="item-comments-count" href="#disqus_thread">26</a>
-                                            <span class="date">06/12/2023</span>
+                                            <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@post.PostContents.CommentsNum</a>
+                                            <span class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        if (x == 4)
+                            break;
                     }
 
                 </div>
@@ -82,160 +88,55 @@
             <div class="col-md-8">
 
                 <div class="cat-list-wrap">
-
                     <div class="cat-list-wrap">
+                        @{
+                            int y = 1;
+                        }
                         @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
                         {
-                            <a href="#" class="cat-list-item">
+                            if (y++ < x)
+                                continue;
+                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" class="cat-list-item">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="pattern">
-                                            <img src="img/blog/news/6.jpg" alt="Alt" class="img-responsive overlay">
+                                            <img src="/uploads/@post.PostContents.PostImage" alt="Alt" class="img-responsive overlay">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <h3>@post.PostContents.Title</h3>
-                                        <div class="date">21/06/2023</div>
-                                        <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
+                                        <div class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</div>
+                                        <div>
+                                            @if (@post.PostContents.PostBody.Length < 180)
+                                            {
+                                                @Html.Raw(@post.PostContents.PostBody)
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(@post.PostContents.PostBody.Remove(180, @post.PostContents.PostBody.Length - 180))
+                                            }
+                                            ...
+                                        </div>
                                     </div>
                                 </div>
                             </a>
                         }
-
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/7.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Потрясающие снимки на новый смартфон на Android</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/8.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Золотистый iPhone предыдущего поколения положили на тыкву</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/9.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Потрясающие снимки на новый смартфон на Android</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/6.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Золотистый iPhone предыдущего поколения положили на тыкву</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/7.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Потрясающие снимки на новый смартфон на Android</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/8.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Золотистый iPhone предыдущего поколения положили на тыкву</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/8.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Золотистый iPhone предыдущего поколения положили на тыкву</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="#" class="cat-list-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="pattern">
-                                        <img src="img/blog/news/8.jpg" alt="Alt" class="img-responsive overlay">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h3>Золотистый iPhone предыдущего поколения положили на тыкву</h3>
-                                    <div class="date">21/06/2023</div>
-                                    <p>Сегодня весь мир ужаснулся этому громкому событию в области информационных технологий. Учёные всего мира ломают голову, как такое могло произойти в принципе. Австралийская девушка, </p>
-                                </div>
-                            </div>
-                        </a>
-
                     </div>
 
                 </div>
-
                 <section class="pagination-section pagination-section-first text-center d-md-none">
-                    <a href="#" class="button">Следующая страница <i class="fa fa-angle-double-right"></i></a>
+                    <a href="#" class="button">
+                        Следующая страница<i class="fa fa-angle-double-right"></i>
+                    </a>
                     <div class="pagination">
                         <span class="pagination-left" title="Предыдущая страница">&laquo;</span>
                         <span class="active">1</span>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
+                        @for (int pageCount = 2; pageCount < (@Model.Posts.Count / 10); pageCount++)
+                        {
+                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-page="@pageCount" class="cat-list-item">@pageCount</a>
+                        }
+
+
                         <a href="#" class="pagination-right" title="Следующая страница">&raquo;</a>
                     </div>
                 </section>
@@ -254,7 +155,7 @@
 
                         <div class="latest-box">
 
-                            <div class="lb-header">Последние статьи:</div>
+                            <div class="lb-header">Последние статьи2:</div>
 
                             <div class="lb-list">
 
@@ -283,7 +184,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="lb-item">
                                     <a href="#" class="lb-catname">Новости IT</a>
                                     <div class="lb-body">
@@ -345,14 +245,14 @@
     </div>
 
     <section class="pagination-section text-center d-none d-md-block">
-        <a href="#" class="button">Следующая страница <i class="fa fa-angle-double-right"></i></a>
+        <a href="#" class="button">Следующая страница3 <i class="fa fa-angle-double-right"></i></a>
         <div class="pagination">
             <span class="pagination-left" title="Предыдущая страница">&laquo;</span>
             <span class="active">1</span>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
+            @for (int pageCount = 2; pageCount < (@Model.Posts.Count / 10); pageCount++)
+            {
+                <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-page="@pageCount" class="cat-list-item">@pageCount</a>
+            }
             <a href="#" class="pagination-right" title="Следующая страница">&raquo;</a>
         </div>
     </section>

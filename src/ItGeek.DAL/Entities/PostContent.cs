@@ -8,7 +8,7 @@
         public string? PostBody { get; set; }
         public string? PostImage { get; set; }
         public int CommentsNum { get; set; }
-        public bool CommentsClosed { get; set; }
+        public bool CommentsClosed { get; set; } = false;
 
     }
 }

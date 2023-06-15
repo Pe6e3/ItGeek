@@ -84,4 +84,10 @@ public class PostTagRepository : GenericRepositoryAsync<PostTag>, IPostTagReposi
             await _db.SaveChangesAsync();
         }
     }
+
+    public async Task<int> RandomTagId()
+    {
+        Tag? tag = await _db.Tags.OrderBy(x=>Guid.NewGuid()).FirstOrDefaultAsync();
+        return tag != null ? tag.Id : 1;
+    }
 }

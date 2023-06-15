@@ -17,23 +17,33 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
 
     public async Task<Post> GetBySlugAsync(string slug)
     {
-        return await _db.Posts.Where(x => x.Slug == slug).Include(x=>x.PostContents).FirstAsync();
+        return await _db.Posts.Where(x => x.Slug == slug).Include(x => x.PostContents).FirstAsync();
     }
 
-	public async Task<List<Post>> ListByCategoryIdAsync(int categoryId)
-	{
+    public async Task<List<Post>> GetLastAsync(int numberPosts) => await _db.Posts.OrderByDescending(x => x.Id).Take(numberPosts).ToListAsync();
+
+    public async Task<List<Post>> ListByCategoryIdAsync(int categoryId)
+    {
 
         List<PostCategory> postCategory = await _db.PostCategories
-            .Where(x=>x.CategoryId == categoryId)
+            .Where(x => x.CategoryId == categoryId)
             .ToListAsync();
 
-		List<Post> post = new List<Post>();
+        List<Post> post = new List<Post>();
 
         foreach (var pc in postCategory)
         {
             post.Add(pc.Post);
-		}
+        }
 
-		return post;
-	}
+        return post;
+    }
+
+
+    public async Task<int> RandomPostId()
+    {
+        Post? lastPost = await _db.Posts.LastOrDefaultAsync();
+        int id = lastPost?.Id + 1 ?? 1; // Получаем Id последнего поста и прибавляем к нему 1
+        return id;
+    }
 }
