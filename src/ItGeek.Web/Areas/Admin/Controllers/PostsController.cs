@@ -349,8 +349,6 @@ public class PostsController : Controller
             PostTag postTag = new PostTag();
             Random random = new Random();
 
-
-            //post.Id = await _uow.PostRepository.RandomPostId();  // возможно стоит убрать?
             post.Slug = await GetRandomWords(1);
             post.CreatedAt = DateTime.Now;
             //post.CreatedBy =
@@ -358,7 +356,7 @@ public class PostsController : Controller
 
             content.Title = await GetRandomWords(3);
             content.PostBody = await GetRandomWords(50);
-            content.PostImage = random.Next(1, 32).ToString() + ".jpg";
+            content.PostImage = random.Next(1, 32).ToString() + ".jpg"; // надо добавить в папку uploads изображения с названием 1.jpg, 2.jpg  и так далее попорядку. Количество поставить в random.Next (у меня 32)
             content.PostId = post.Id;
 
             postCat.PostId = post.Id;

@@ -1,8 +1,6 @@
 ﻿using ItGeek.BLL;
 using Microsoft.AspNetCore.Mvc;
 
-//здесь имя папки в Components, в которой должно лежать представоение Default.cshtml
-[ViewComponent(Name = "Lasts")] 
 public class LastsViewComponent : ViewComponent
 {
     private readonly UnitOfWork _uow;
@@ -11,12 +9,8 @@ public class LastsViewComponent : ViewComponent
     {
         _uow = uow;
     }
-	public async Task<IViewComponentResult> InvokeAsync()
-	{
-		var menuItems = await _uow.MenuItemRepository.GetByMenuIdAsync(1);
-		return View(menuItems);
-	}
-
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        return View(await _uow.PostRepository.GetLastAsync(5));
+    }
 }
-
-

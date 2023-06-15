@@ -20,8 +20,12 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         return await _db.Posts.Where(x => x.Slug == slug).Include(x => x.PostContents).FirstAsync();
     }
 
-    public async Task<List<Post>> GetLastAsync(int numberPosts) => await _db.Posts.OrderByDescending(x => x.Id).Take(numberPosts).ToListAsync();
 
+    public async Task<List<Post>> GetLastAsync(int numberPosts)
+    {
+        //return await _db.Posts.OrderByDescending(x => x.Id).Take(numberPosts).DistinctBy(x => x.Categories.FirstOrDefault().Id).ToListAsync();
+        return await _db.Posts.Include(x => x.PostContents).Include(q => q.Categories).OrderByDescending(x => x.Id).Take(numberPosts).ToListAsync();
+    }
     public async Task<List<Post>> ListByCategoryIdAsync(int categoryId)
     {
 
@@ -46,4 +50,6 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
         int id = lastPost?.Id + 1 ?? 1; // Получаем Id последнего поста и прибавляем к нему 1
         return id;
     }
+
+
 }
