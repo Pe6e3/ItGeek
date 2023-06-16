@@ -31,6 +31,7 @@
                 <div class="col-md-7">
                     @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
                     {
+                        // TODO: 1 пост посередине, 2й и 3й справа, с4го - внизу
                         <div class="type-one-first">
                             <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" title="@post.PostContents.Title">
                                 <img src="/uploads/@post.PostContents.PostImage" alt="alt" class="img-responsive img-width">
@@ -49,13 +50,8 @@
                 </div>
 
                 <div class="col-md-5 item-title-white">
-                    @{
-                        int x = 1;
-                    }
-                    @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
+                    @foreach (ItGeek.DAL.Entities.Post post in Model.Posts.Take(3).Skip(1))
                     {
-                        if (x++ == 1)
-                            continue;
                         <div class="pattern">
                             <div class="overlay item-title" style="background-image: url('/uploads/@post.PostContents.PostImage')">
                                 <div class="item-title-content">
@@ -69,8 +65,6 @@
                                 </div>
                             </div>
                         </div>
-                        if (x == 4)
-                            break;
                     }
 
                 </div>
@@ -92,10 +86,8 @@
                         @{
                             int y = 1;
                         }
-                        @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
+                        @foreach (ItGeek.DAL.Entities.Post post in Model.Posts.Skip(3))
                         {
-                            if (y++ < x)
-                                continue;
                             <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" class="cat-list-item">
                                 <div class="row">
                                     <div class="col-sm-6">

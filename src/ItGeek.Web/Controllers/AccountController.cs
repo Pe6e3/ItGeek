@@ -1,15 +1,14 @@
 ﻿using ItGeek.BLL;
 using ItGeek.DAL.Entities;
 using ItGeek.Web.ViewModels;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using ItGeek.DAL.Enum;
 
 namespace ItGeek.Web.Controllers
 {
-    public class AccountController : Controller
+	public class AccountController : Controller
     {
         private readonly UnitOfWork _uow;
 
