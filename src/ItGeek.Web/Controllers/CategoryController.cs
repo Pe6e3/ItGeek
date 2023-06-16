@@ -14,8 +14,11 @@ namespace ItGeek.Web.Controllers
         }
 
         [HttpGet("[Controller]/{categorySlug}")]
-        public async Task<IActionResult> Index(string categorySlug) =>
-            View(await uow.CategoryRepository.GetBySlugAsync(categorySlug));
+        public async Task<IActionResult> Index(string categorySlug, int page = 1)
+        {
+            ViewBag.Page = page;
+            return View(await uow.CategoryRepository.GetBySlugAsync(categorySlug));
+        }
 
         [HttpGet("[Controller]/{categorySlug}/{postSlug}")]
         public async Task<IActionResult> Post(string categorySlug, string postSlug)
