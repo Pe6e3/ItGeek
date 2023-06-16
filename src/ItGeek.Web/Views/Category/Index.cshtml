@@ -1,4 +1,5 @@
-﻿@model ItGeek.DAL.Entities.Category
+﻿@using ItGeek.DAL.Entities;
+@model ItGeek.DAL.Entities.Category
 @{
     ViewBag.Title = Model.Name;
 }
@@ -29,42 +30,45 @@
             <div class="row">
 
                 <div class="col-md-7">
-                    @foreach (ItGeek.DAL.Entities.Post post in Model.Posts)
-                    {
-                        // TODO: 1 пост посередине, 2й и 3й справа, с4го - внизу
+                    @{
+                        // 1. Пост посередине
+                        Post firstPost = Model.Posts.Take(1).FirstOrDefault();
                         <div class="type-one-first">
-                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" title="@post.PostContents.Title">
-                                <img src="/uploads/@post.PostContents.PostImage" alt="alt" class="img-responsive img-width">
+                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@firstPost.Slug" title="@firstPost.PostContents.Title">
+                                <img src="/uploads/@firstPost.PostContents.PostImage" alt="alt" class="img-responsive img-width">
                             </a>
                             <div class="item-social">
                                 <div class="item-comments" title="Количество комментариев">
-                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@post.PostContents.CommentsNum</a>
-                                    <span class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                    <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@firstPost.PostContents.CommentsNum</a>
+                                    <span class="date">@firstPost.CreatedAt.ToString("dd/MM/yyyy")</span>
                                 </div>
                             </div>
-                            <h3><a href="#">@post.PostContents.Title</a></h3>
+                            <h3><a href="#">@firstPost.PostContents.Title</a></h3>
                         </div>
-                        break;
                     }
 
                 </div>
 
                 <div class="col-md-5 item-title-white">
-                    @foreach (ItGeek.DAL.Entities.Post post in Model.Posts.Take(3).Skip(1))
-                    {
-                        <div class="pattern">
-                            <div class="overlay item-title" style="background-image: url('/uploads/@post.PostContents.PostImage')">
-                                <div class="item-title-content">
-                                    <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug">@post.PostContents.Title</a></h3>
-                                    <div class="item-social">
-                                        <div class="item-comments" title="Количество комментариев">
-                                            <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@post.PostContents.CommentsNum</a>
-                                            <span class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                    @{
+                        // 2. 2 поста справа
+                        IEnumerable<Post> posts = Model.Posts.Take(3).Skip(1);
+                        @foreach (ItGeek.DAL.Entities.Post post in posts)
+                        {
+                            <div class="pattern">
+                                <div class="overlay item-title" style="background-image: url('/uploads/@post.PostContents.PostImage')">
+                                    <div class="item-title-content">
+                                        <h3><a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug">@post.PostContents.Title</a></h3>
+                                        <div class="item-social">
+                                            <div class="item-comments" title="Количество комментариев">
+                                                <i class="fa fa-comment"></i><a class="item-comments-count" href="#">@post.PostContents.CommentsNum</a>
+                                                <span class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     }
 
                 </div>
@@ -84,34 +88,35 @@
                 <div class="cat-list-wrap">
                     <div class="cat-list-wrap">
                         @{
-                            int y = 1;
-                        }
-                        @foreach (ItGeek.DAL.Entities.Post post in Model.Posts.Skip(3))
-                        {
-                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" class="cat-list-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="pattern">
-                                            <img src="/uploads/@post.PostContents.PostImage" alt="Alt" class="img-responsive overlay">
+                            // 3. Остальные посты снизу
+                            posts = Model.Posts.Skip(3);
+                            foreach (ItGeek.DAL.Entities.Post post in posts)
+                            {
+                                <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-postSlug="@post.Slug" class="cat-list-item">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="pattern">
+                                                <img src="/uploads/@post.PostContents.PostImage" alt="Alt" class="img-responsive overlay">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h3>@post.PostContents.Title</h3>
+                                            <div class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</div>
+                                            <div>
+                                                @if (@post.PostContents.PostBody.Length < 180)
+                                                {
+                                                    @Html.Raw(@post.PostContents.PostBody)
+                                                }
+                                                else
+                                                {
+                                                    @Html.Raw(@post.PostContents.PostBody.Remove(180, @post.PostContents.PostBody.Length - 180))
+                                                }
+                                                ...
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <h3>@post.PostContents.Title</h3>
-                                        <div class="date">@post.CreatedAt.ToString("dd/MM/yyyy")</div>
-                                        <div>
-                                            @if (@post.PostContents.PostBody.Length < 180)
-                                            {
-                                                @Html.Raw(@post.PostContents.PostBody)
-                                            }
-                                            else
-                                            {
-                                                @Html.Raw(@post.PostContents.PostBody.Remove(180, @post.PostContents.PostBody.Length - 180))
-                                            }
-                                            ...
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            }
                         }
                     </div>
 
