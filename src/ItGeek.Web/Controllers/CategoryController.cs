@@ -1,31 +1,28 @@
 ﻿using ItGeek.BLL;
 using ItGeek.DAL.Entities;
-using ItGeek.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItGeek.Web.Controllers
 {
-	public class CategoryController : Controller
-	{
-        private readonly UnitOfWork _uow;
+    public class CategoryController : Controller
+    {
+        private readonly UnitOfWork uow;
 
         public CategoryController(UnitOfWork uow)
         {
-            _uow = uow;
+            this.uow = uow;
         }
-        [HttpGet("[Controller]/{categorySlug}")]
-        public async Task<IActionResult> Index(string categorySlug)
-		{
-			Category category = await _uow.CategoryRepository.GetBySlugAsync(categorySlug);
-			return View(category);
-		}
 
-		[HttpGet("[Controller]/{categorySlug}/{postSlug}")]
-		public async Task<IActionResult> Post(string categorySlug, string postSlug)
+        [HttpGet("[Controller]/{categorySlug}")]
+        public async Task<IActionResult> Index(string categorySlug) =>
+            View(await uow.CategoryRepository.GetBySlugAsync(categorySlug));
+
+        [HttpGet("[Controller]/{categorySlug}/{postSlug}")]
+        public async Task<IActionResult> Post(string categorySlug, string postSlug)
         {
-			Post postOne = await _uow.PostRepository.GetBySlugAsync(postSlug);
-            ViewBag.Category = await _uow.CategoryRepository.GetBySlugAsync(categorySlug);
-			return View(postOne);
+            Post postOne = await uow.PostRepository.GetBySlugAsync(postSlug);
+            ViewBag.Category = await uow.CategoryRepository.GetBySlugAsync(categorySlug);
+            return View(postOne);
         }
 
         [HttpPost]
@@ -34,15 +31,15 @@ namespace ItGeek.Web.Controllers
             comment.CreatedAt = DateTime.Now;
             if (ModelState.IsValid)
             {
-                await _uow.CommentRepository.InsertAsync(comment);
+                await uow.CommentRepository.InsertAsync(comment);
 
-                Post postOne = await _uow.PostRepository.GetBySlugAsync(postSlugOld);
+                Post postOne = await uow.PostRepository.GetBySlugAsync(postSlugOld);
                 PostComment postComment = new PostComment()
                 {
                     PostId = postOne.Id,
                     CommentId = comment.Id,
                 };
-                await _uow.PostCommentRepository.InsertAsync(postComment);
+                await uow.PostCommentRepository.InsertAsync(postComment);
 
             }
             return RedirectToAction("Post", new { categorySlug = categorySlugOld, postSlug = postSlugOld });
