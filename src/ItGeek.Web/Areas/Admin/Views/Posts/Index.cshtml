@@ -28,18 +28,11 @@
                 <table class="table table-bordered dataTable" id="myTable">
                     <thead>
                         <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PostImage)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Title)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Slug)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.IsDeleted)
-                            </th>
+                            <th>@Html.DisplayNameFor(model => model.PostImage)</th>
+                            <th>@Html.DisplayNameFor(model => model.Title)</th>
+                            <th>@Html.DisplayNameFor(model => model.Categories)</th>
+                            <th>@Html.DisplayNameFor(model => model.Slug)</th>
+                            <th>@Html.DisplayNameFor(model => model.IsDeleted)</th>
                             <th style="width: 180px"></th>
                         </tr>
                     </thead>
@@ -47,18 +40,16 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+                                <td><img src="~/uploads/@item.PostImage" style="width:100px;" /></td>
+                                <td>@Html.DisplayFor(modelItem => item.Title)</td>
                                 <td>
-                                    <img src="~/uploads/@item.PostImage" style="width:100px;" />
+                                    @foreach (Category cat in item.Categories)
+                                    {
+                                        @Html.DisplayFor(catItem => cat.Name) <br />
+                                    }
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Title)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Slug)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsDeleted)
-                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Slug)</td>
+                                <td>@Html.DisplayFor(modelItem => item.IsDeleted)</td>
                                 <td>
                                     <a class="btn btn-success" asp-action="Update" asp-route-id="@item.Id">
                                         <i class="fa fa-pen"></i>

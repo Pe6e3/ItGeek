@@ -17,7 +17,7 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
 
     public async Task<Post> GetBySlugAsync(string slug)
     {
-        return await _db.Posts.Include(x=>x.Comments).Where(x => x.Slug == slug).Include(x => x.PostContents).FirstAsync();
+        return await _db.Posts.Include(x => x.Comments).Where(x => x.Slug == slug).Include(x => x.PostContents).FirstAsync();
     }
 
 
@@ -55,4 +55,6 @@ public class PostRepository : GenericRepositoryAsync<Post>, IPostRepository
     {
         return await _db.Posts.Include(q => q.Categories).ToListAsync();
     }
+
+    public async Task<List<Post>> ListPostsWithCatsAsync() => await _db.Posts.Include(x => x.Categories).ToListAsync();
 }

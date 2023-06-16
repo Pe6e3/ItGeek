@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ItGeek.DAL.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ItGeek.Web.Areas.Admin.ViewModels
 {
-	public class PostViewModel
+    public class PostViewModel
     {
         public int Id { get; set; }
         //from Post
@@ -27,7 +28,7 @@ namespace ItGeek.Web.Areas.Admin.ViewModels
         [Display(Name = "Открыть комментарии")]
         public bool CommentsClosed { get; set; } = true;
         [NotMapped]
-        [Display(Name="Изображение")]
+        [Display(Name = "Изображение")]
         public IFormFile? ImageFile { get; set; }
 
         [Display(Name = "Категория")]
@@ -39,5 +40,6 @@ namespace ItGeek.Web.Areas.Admin.ViewModels
         [Display(Name = "Теги")]
         public string? TagIds { get; set; }
 
+        public List<Category>? Categories { get; set; }
     }
 }

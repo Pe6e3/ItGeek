@@ -22,7 +22,7 @@ public class PostsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        List<Post> allPosts = (List<Post>)await _uow.PostRepository.ListAllAsync();
+        List<Post> allPosts = (List<Post>)await _uow.PostRepository.ListPostsWithCatsAsync();
         List<PostContent> allPostsContent = (List<PostContent>)await _uow.PostContentRepository.ListAllAsync();
 
 
@@ -39,6 +39,7 @@ public class PostsController : Controller
                 PostBody = onePostsContent.PostBody,
                 PostImage = onePostsContent.PostImage,
                 CommentsClosed = onePostsContent.CommentsClosed,
+                Categories = onePost.Categories
             }
             );
         }
