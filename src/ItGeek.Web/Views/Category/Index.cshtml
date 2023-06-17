@@ -1,7 +1,8 @@
 ﻿@using ItGeek.DAL.Entities;
 @model ItGeek.DAL.Entities.Category
-@ViewBag.Title = @Model.Name;
-
+@{
+    ViewBag.Title = Model.Name;
+}
 
 <div class="pattern pattern-cat-header">
     <div class="cat-header overlay" style="background-image: url('/uploads/@Model.CategoryImage')">
@@ -78,7 +79,7 @@
     </div>
 </div>
 
-<div class="cat-list">
+<div class="cat-list" id="oldPosts">
     <div class="container">
         <div class="row">
 
@@ -123,19 +124,6 @@
                 </div>
 
 
-                <!-- пагинация для телефона-->
-                <section class="pagination-section pagination-section-first text-center d-md-none">
-                    <a href="#" class="button">Следующая страница  <i class="fa fa-angle-double-right"></i></a>
-                    <div class="pagination d-flex justify-content-center">
-
-                        <a href="#" class="cat-list-item pagination-left" title="Предыдущая страница">&laquo;</a>
-                        @for (int pageCount = 1; pageCount <= (@Model.Posts.Count / 7); pageCount++)
-                        {
-                            <a asp-action="Post" asp-controller="Category" asp-route-categorySlug="@Model.Slug" asp-route-page="@pageCount" class="cat-list-item">@pageCount</a>
-                        }
-                        <a href="#" class="pagination-right cat-list-item" title="Следующая страница">&raquo;</a>
-                    </div>
-                </section>
 
             </div>
 
@@ -151,8 +139,8 @@
         </div>
     </div>
 
-    <!--  пагинация для компьютера-->
-    <section class="pagination-section text-center d-none d-md-block">
+    <!--  пагинация  -->
+    <section class="pagination-section text-center">
         @{
             int maxPages = (int)Math.Ceiling((double)Model.Posts.Count / 7);      // количество страниц с учетом неполной последней
             int back = ViewBag.Page == 1 ? 1 : ViewBag.Page - 1;                  // номер страницы минус один
@@ -164,16 +152,17 @@
            asp-controller="Category"
            asp-route-categorySlug="@Model.Slug"
            asp-route-page="@forward"
-           class="button @(ViewBag.Page==forward ? "d-none":"")">
+           class="button @(ViewBag.Page==forward ? "disabled" : "")"
+           style="@(ViewBag.Page==forward ? "background-color: gray;pointer-events: none;" : "")">
             Следующая страница
-            <i class="fa fa-angle-double-right"></i>
         </a>
+
 
 
         <div class="pagination d-flex justify-content-center">
             @{
                 // кнопка назад
-                <a asp-action="Index"
+                <a asp-action=" Index"
                    asp-controller="Category"
                    asp-route-categorySlug="@Model.Slug"
                    asp-route-page="@back"
@@ -188,7 +177,7 @@
                        asp-controller="Category"
                        asp-route-categorySlug="@Model.Slug"
                        asp-route-page="@pageCount"
-                       class="cat-list-item" style="  @(pageCount == ViewBag.Page ? "background-color:red; " : "")">
+                       class="cat-list-item" style="@(pageCount == ViewBag.Page ? "background-color:red; " : "")">
                         @pageCount
                     </a>
                 }
@@ -202,8 +191,10 @@
                    title="Следующая страница">
                     &raquo;
                 </a>
+
             }
         </div>
     </section>
 
 </div>
+
