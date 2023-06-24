@@ -2,7 +2,7 @@
 
 namespace ItGeek.DAL.Interfaces
 {
-    public interface ICommentsRepository : IGenericRepositoryAsync<Comment>
+    public interface ICommentRepository : IGenericRepositoryAsync<Comment>
     {
 
     }

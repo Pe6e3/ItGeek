@@ -18,15 +18,13 @@
     <div class="col-12">
         <div class="card shadow mb-4">
             <div class="card-body">
-
-
                 <table class="table table-bordered dataTable" id="myTable">
                     <thead>
                         <tr>
-                            <th>Пункты меню</th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Name)
                             </th>
+                            <th>Пункты меню</th>
                             <th style="width: 180px"></th>
                         </tr>
                     </thead>
@@ -34,8 +32,15 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td><a asp-controller="MenuItems" asp-action="Index" asp-route-menuid="@item.Id" class="btn btn-warning">Пункты меню</a></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning"
+                                   asp-action="Index"
+                                   asp-controller="MenuItems"
+                                   asp-route-menuid="@item.Id">Пункты меню</a>
+                                </td>
                                 <td>
                                     <a class="btn btn-success" asp-action="Update" asp-route-id="@item.Id">
                                         <i class="fa fa-pen"></i>
@@ -51,9 +56,6 @@
                         }
                     </tbody>
                 </table>
-
-
-
             </div>
         </div>
     </div>

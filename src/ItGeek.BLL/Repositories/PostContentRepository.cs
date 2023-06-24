@@ -1,5 +1,4 @@
 ﻿using ItGeek.DAL.Data;
-using ItGeek.DAL.Data.Repositories;
 using ItGeek.DAL.Entities;
 using ItGeek.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,31 +10,29 @@ public class PostContentRepository : GenericRepositoryAsync<PostContent>, IPostC
     private readonly AppDbContext _db;
 
     public PostContentRepository(AppDbContext db) : base(db)
-    {
+	{
         _db = db;
     }
+
     public async Task<PostContent> GetByPostIDAsync(int postId)
-    {
-        return await _db.PostContents.Where(x => x.PostId == postId).FirstAsync();
+	{
+        return await _db.PostContents.Where(x=>x.PostId == postId).FirstAsync();
     }
 
+	public async Task<List<PostContent>> ListByCategoryIdAsync(int categoryId)
+	{
+		Category cat = await _db.Categories.FindAsync(categoryId);
 
+		List<PostCategory> postCategory = await _db.PostCategories.Where(x => x.CategoryId == cat.Id).ToListAsync();
 
-    public async Task<List<PostContent>> ListByCategoryIdAsync(int categoryId)
-    {
-        Category cat = await _db.Categories.FindAsync(categoryId);
+		List<PostContent> postContent = new List<PostContent>();
 
-        List<PostCategory> postCategory = await _db.PostCategories.Where(x => x.CategoryId == cat.Id).ToListAsync();
+		foreach (var pc in postCategory)
+		{
+			PostContent onePC = await _db.PostContents.Where(x => x.PostId == pc.PostId).FirstAsync();
+			postContent.Add(onePC);
+		}
 
-        List<PostContent> postContent = new List<PostContent>();
-
-        foreach (var pc in postCategory)
-        {
-            PostContent onePC = await _db.PostContents.Where(x => x.PostId == pc.PostId).FirstAsync();
-            postContent.Add(onePC);
-        }
-
-        return postContent;
-    }
-
+		return postContent;
+	}
 }

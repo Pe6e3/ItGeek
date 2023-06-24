@@ -27,6 +27,7 @@ public class UnitOfWork
     private PostCategoryRepository _postCategoryRepository;
     private PostAuthorRepository _postAuthorRepository;
     private PostTagRepository _postTagRepository;
+    private PostCommentRepository _postCommentRepository;
 
 
 
@@ -193,6 +194,17 @@ public class UnitOfWork
                 _postTagRepository = new PostTagRepository(_db);
             }
             return _postTagRepository;
+        }
+    }
+    public PostCommentRepository PostCommentRepository
+    {
+        get
+        {
+            if (_postCommentRepository == null)
+            {
+                _postCommentRepository = new PostCommentRepository(_db);
+            }
+            return _postCommentRepository;
         }
     }
 }

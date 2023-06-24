@@ -1,5 +1,4 @@
 ﻿using ItGeek.DAL.Data;
-using ItGeek.DAL.Data.Repositories;
 using ItGeek.DAL.Entities;
 using ItGeek.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +14,16 @@ public class CategoryRepository : GenericRepositoryAsync<Category>, ICategoryRep
         _db = db;
     }
 
-    public async Task<Category> GetBySlugAsync(string slug)
+    public async Task<Category> GetBySlugAsync(string categorySlug) => await
+        _db.Categories
+        .Include(x => x.Posts)
+        .ThenInclude(i => i.PostContents)
+        //.Where(x => x.Slug == categorySlug).FirstAsync();
+        .Where(x => x.Slug == categorySlug).FirstOrDefaultAsync();
+
+    public async Task<Category> RandomCatId()
     {
-        return await _db.Categories.Where(x => x.Slug == slug).FirstAsync();
+        Category? category = await _db.Categories.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync();
+        return category;
     }
 }

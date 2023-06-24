@@ -3,6 +3,7 @@ using ItGeek.BLL.Repositories;
 using ItGeek.DAL.Entities;
 using ItGeek.Web.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace ItGeek.Web.Areas.Admin.Controllers
 {
@@ -10,9 +11,11 @@ namespace ItGeek.Web.Areas.Admin.Controllers
     public class AuthorsController : Controller
     {
         private readonly UnitOfWork _uow;
-        public AuthorsController(UnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public AuthorsController(UnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
         {
             _uow = unitOfWork;
+            _hostEnvironment = hostEnvironment;
         }
         public async Task<IActionResult> Index()
         {
@@ -35,20 +38,22 @@ namespace ItGeek.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-
+            ViewBag.isCreate = true;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Author authors)
+        public async Task<IActionResult> Create(Author author)
         {
+            author.AuthorImage = "";
             if (ModelState.IsValid)
             {
-                await _uow.AuthorRepository.InsertAsync(authors);
+                author.AuthorImage = await ProcessUploadFile(author);
+                await _uow.AuthorRepository.InsertAsync(author);
                 return RedirectToAction(nameof(Index));
-
             }
-            return View(authors);
+            ViewBag.isCreate = true;
+            return View(author);
         }
 
         public async Task<IActionResult> Update(int id)
@@ -58,21 +63,46 @@ namespace ItGeek.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewBag.isCreate = false;
             return View(authors);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Author authors)
+        public async Task<IActionResult> Update(Author author)
         {
             if (ModelState.IsValid)
             {
-                await _uow.AuthorRepository.UpdateAsync(authors);
-                return RedirectToAction(nameof(Index));
+                // Получили новую картинку 
+                if (author.ImageFile != null)
+                {
+                    string newImage = await ProcessUploadFile(author);
+                    author.AuthorImage = newImage;
+                }
 
+                await _uow.AuthorRepository.UpdateAsync(author);
+                return RedirectToAction(nameof(Index));
             }
-            return View(authors);
+            ViewBag.isCreate = false;
+            return View(author);
+        }
+
+        protected async Task<string> ProcessUploadFile(Author author)
+        {
+            string uniqueFileName = "";
+            if (author.ImageFile != null)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(author.ImageFile.FileName);
+                string fileExtension = Path.GetExtension(author.ImageFile.FileName);
+                uniqueFileName = fileName + DateTime.Now.ToString("yymmddssfff") + fileExtension;
+                string path = Path.Combine(wwwRootPath + "/uploads/", uniqueFileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await author.ImageFile.CopyToAsync(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }
 
- 

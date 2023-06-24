@@ -1,41 +1,51 @@
 ﻿using ItGeek.BLL;
 using ItGeek.DAL.Entities;
-using ItGeek.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItGeek.Web.Controllers
 {
-	public class CategoryController : Controller
-	{
-        private readonly UnitOfWork _uow;
+    public class CategoryController : Controller
+    {
+        private readonly UnitOfWork uow;
 
         public CategoryController(UnitOfWork uow)
-		{
-            _uow = uow;
+        {
+            this.uow = uow;
         }
-		public IActionResult Index() =>View();
 
-        //[HttpGet("{categorySlug}/{postSlug}")]  // по этому адресу будет переходить на этот экшн. Например https://localhost:7067/itnews/123
+        [HttpGet("[Controller]/{categorySlug}")]
+        public async Task<IActionResult> Index(string categorySlug, int page = 1)
+        {
+            ViewBag.Page = page;
+            return View(await uow.CategoryRepository.GetBySlugAsync(categorySlug));
+        }
+
+        [HttpGet("[Controller]/{categorySlug}/{postSlug}")]
         public async Task<IActionResult> Post(string categorySlug, string postSlug)
-		{
-			Post postOne = await _uow.PostRepository.GetBySlugAsync(postSlug);
-			Category category = await _uow.CategoryRepository.GetBySlugAsync(categorySlug);
-			List<Post> allPosts = await _uow.PostRepository.ListByCategoryIdAsync(category.Id);
+        {
+            Post postOne = await uow.PostRepository.GetBySlugAsync(postSlug);
+            ViewBag.Category = await uow.CategoryRepository.GetBySlugAsync(categorySlug);
+            return View(postOne);
+        }
 
-			List<PostContent> allPostContents = await _uow.PostContentRepository.ListByCategoryIdAsync(category.Id);
+        [HttpPost]
+        public async Task<IActionResult> AddComment(Comment comment, string categorySlugOld, string postSlugOld)
+        {
+            comment.CreatedAt = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                await uow.CommentRepository.InsertAsync(comment);
 
-			PostContentViewModel postContent = new PostContentViewModel()
-			{
-				category = category,
-				post = postOne,
-				postContent = await _uow.PostContentRepository.GetByPostIDAsync(postOne.Id),
-				posts = allPosts,
-				postContents = allPostContents
-			};
+                Post postOne = await uow.PostRepository.GetBySlugAsync(postSlugOld);
+                PostComment postComment = new PostComment()
+                {
+                    PostId = postOne.Id,
+                    CommentId = comment.Id,
+                };
+                await uow.PostCommentRepository.InsertAsync(postComment);
 
-			return View(postContent);
-		}
-
-
-	}
+            }
+            return RedirectToAction("Post", new { categorySlug = categorySlugOld, postSlug = postSlugOld });
+        }
+    }
 }

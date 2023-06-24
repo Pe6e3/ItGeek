@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ItGeek.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class PostTag : Migration
+    public partial class Radik : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -175,9 +175,9 @@ namespace ItGeek.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EditedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: true),
                     EditedById = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -215,78 +215,6 @@ namespace ItGeek.DAL.Migrations
                         name: "FK_UserProfiles_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuthorPost",
-                columns: table => new
-                {
-                    AuthorsId = table.Column<int>(type: "int", nullable: false),
-                    PostsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuthorPost", x => new { x.AuthorsId, x.PostsId });
-                    table.ForeignKey(
-                        name: "FK_AuthorPost_Authors_AuthorsId",
-                        column: x => x.AuthorsId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AuthorPost_Posts_PostsId",
-                        column: x => x.PostsId,
-                        principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategoryPost",
-                columns: table => new
-                {
-                    CategoriesId = table.Column<int>(type: "int", nullable: false),
-                    PostsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryPost", x => new { x.CategoriesId, x.PostsId });
-                    table.ForeignKey(
-                        name: "FK_CategoryPost_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategoryPost_Posts_PostsId",
-                        column: x => x.PostsId,
-                        principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CommentPost",
-                columns: table => new
-                {
-                    CommentsId = table.Column<int>(type: "int", nullable: false),
-                    PostsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CommentPost", x => new { x.CommentsId, x.PostsId });
-                    table.ForeignKey(
-                        name: "FK_CommentPost_Comments_CommentsId",
-                        column: x => x.CommentsId,
-                        principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CommentPost_Posts_PostsId",
-                        column: x => x.PostsId,
-                        principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -393,8 +321,6 @@ namespace ItGeek.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-          
-
             migrationBuilder.CreateTable(
                 name: "PostTags",
                 columns: table => new
@@ -442,24 +368,9 @@ namespace ItGeek.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorPost_PostsId",
-                table: "AuthorPost",
-                column: "PostsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AuthorsSocials_AuthorId",
                 table: "AuthorsSocials",
                 column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CategoryPost_PostsId",
-                table: "CategoryPost",
-                column: "PostsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommentPost_PostsId",
-                table: "CommentPost",
-                column: "PostsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MenuItems_MenuId",
@@ -499,7 +410,8 @@ namespace ItGeek.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PostContents_PostId",
                 table: "PostContents",
-                column: "PostId");
+                column: "PostId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_CreatedById",
@@ -510,7 +422,6 @@ namespace ItGeek.DAL.Migrations
                 name: "IX_Posts_EditedById",
                 table: "Posts",
                 column: "EditedById");
-
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostTags_PostId",
@@ -537,16 +448,7 @@ namespace ItGeek.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuthorPost");
-
-            migrationBuilder.DropTable(
                 name: "AuthorsSocials");
-
-            migrationBuilder.DropTable(
-                name: "CategoryPost");
-
-            migrationBuilder.DropTable(
-                name: "CommentPost");
 
             migrationBuilder.DropTable(
                 name: "MenuItems");
@@ -562,7 +464,6 @@ namespace ItGeek.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "PostContents");
-
 
             migrationBuilder.DropTable(
                 name: "PostTags");
